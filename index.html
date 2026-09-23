@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#050408">
+  <title>FRACTURED: The Darkness</title>
+  <link rel="stylesheet" href="./styles.css?v=1">
+</head>
+<body>
+<div id="app">
+  <section id="start-screen" class="flow-screen active center-screen">
+    <div class="sigil">✦</div>
+    <h1 class="logo">FRACTURED</h1>
+    <div class="sublogo">THE DARKNESS</div>
+    <p>Worlds fracture. Blood remembers.</p>
+    <button id="start-btn" class="primary-btn">START</button>
+  </section>
+
+  <section id="race-screen" class="flow-screen">
+    <div class="flow-panel">
+      <div class="sigil">✦</div>
+      <h2>CHOOSE YOUR BLOODLINE</h2>
+      <p>Choose one full-blooded race or combine two races as a half-blood.</p>
+      <div class="mode-switch">
+        <button id="pure-btn" class="selected">FULL BLOODED</button>
+        <button id="hybrid-btn">HALF BLOODED</button>
+      </div>
+      <div id="race-summary" class="selection-summary">Select one race.</div>
+      <div id="race-grid" class="choice-grid"></div>
+      <div class="flow-footer">
+        <button id="flow-back-start">BACK</button>
+        <button id="race-next" class="primary-btn" disabled>CONTINUE</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="class-screen" class="flow-screen">
+    <div class="flow-panel">
+      <div class="sigil">✦</div>
+      <h2>CHOOSE YOUR CLASS</h2>
+      <p>Your blood determines what you are. Your class determines how you fight.</p>
+      <div id="bloodline-summary" class="selection-summary"></div>
+      <div id="class-grid" class="choice-grid"></div>
+      <div class="flow-footer">
+        <button id="flow-back-race">BACK</button>
+        <button id="enter-world" class="primary-btn" disabled>ENTER WORLD</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="loading-screen" class="flow-screen center-screen">
+    <div class="sigil loading-sigil">✦</div>
+    <h2 class="loading-title">ENTERING THE SHATTERED KINGDOM</h2>
+    <p id="loading-build">Preparing your bloodline...</p>
+    <div class="loading-track"><div id="loading-fill"></div></div>
+  </section>
+
+  <main id="game-shell">
+    <div id="world-art" aria-hidden="true">
+      <img id="world-background" src="./assets/shattered_kingdom_world.jpeg?v=1" alt="">
+      <div class="world-grade"></div>
+      <div class="world-vignette"></div>
+    </div>
+
+    <div id="stone-bridge" aria-hidden="true">
+      <div class="bridge-lip"></div>
+      <div class="bridge-face"></div>
+    </div>
+
+    <canvas id="game"></canvas>
+
+    <section id="hud">
+      <div id="build-label">ANGEL · KNIGHT</div>
+      <div class="bar"><span>HP</span><div class="track"><div id="hp-fill"></div></div></div>
+      <div class="bar"><span>STA</span><div class="track"><div id="stamina-fill"></div></div></div>
+      <div id="state-label">IDLE</div>
+    </section>
+
+    <div id="quest">
+      <strong>THE SHATTERED KINGDOM</strong>
+      <span>Reach the abandoned cathedral beneath the Blood Moon.</span>
+    </div>
+
+    <div id="quick-menu">
+      <button id="menu-character">CHARACTER</button>
+      <button id="menu-inventory">INVENTORY</button>
+    </div>
+
+    <section id="controls" aria-label="mobile controls">
+      <div id="move-pad" class="pad"><div id="move-knob"></div></div>
+      <button id="jump-btn" class="round jump">JUMP</button>
+      <div id="combat-cluster">
+        <button id="ability1-btn" class="small ability a1">I</button>
+        <button id="ability2-btn" class="small ability a2">II</button>
+        <button id="ability3-btn" class="small ability a3">III</button>
+        <button id="attack-btn" class="small attack">ATK</button>
+        <button id="block-btn" class="small block">BLK</button>
+        <button id="heal-btn" class="small heal">HEAL</button>
+        <button id="dodge-btn" class="round dodge">DODGE</button>
+      </div>
+    </section>
+
+    <div id="toast"></div>
+  </main>
+
+  <div id="rpgMenu" aria-hidden="true">
+    <nav class="menuTop">
+      <button class="menuTab active" data-page="character">CHARACTER</button>
+      <button class="menuTab" data-page="inventory">INVENTORY</button>
+      <button id="menu-close" class="menuClose">×</button>
+    </nav>
+
+    <main id="characterPage" class="menuPage active">
+      <div class="charLayout">
+        <div id="leftEquip" class="equipCol"></div>
+        <div class="charCenter">
+          <img id="character-preview" alt="Angel Knight preview">
+          <h2 id="bloodlineText">ANGEL · KNIGHT</h2>
+          <div id="bloodlineTier" class="bloodline">FULL BLOODED</div>
+        </div>
+        <div id="rightEquip" class="equipCol"></div>
+      </div>
+      <div class="levelRow">LEVEL 1<div class="xpbar"><i></i></div></div>
+      <div id="statColumns" class="statColumns"></div>
+    </main>
+
+    <main id="inventoryPage" class="menuPage">
+      <div class="inventoryBody">
+        <div id="invGrid" class="invGrid"></div>
+        <aside id="itemDetail" class="itemDetail"></aside>
+      </div>
+      <div class="menuFooter">Equip · Compare · Sort · Back</div>
+    </main>
+  </div>
+</div>
+<script type="module" src="./main.js?v=1"></script>
+</body>
+</html>
