@@ -1,4 +1,4 @@
-import {AngelKnightRenderer} from "./renderer.js?v=1";
+import {AngelKnightRenderer} from "./renderer.js?v=2";
 export class Player{
   constructor(x,y){this.x=x;this.y=y;this.groundY=y;this.vx=0;this.vy=0;this.facing=1;this.speed=185;this.runSpeed=245;this.jumpPower=620;this.gravity=1750;this.onGround=true;this.dead=false;this.isBlocking=false;this.invulnerable=false;this.maxHp=100;this.hp=100;this.maxStamina=100;this.stamina=100;this.state="idle";this.comboStep=0;this.comboWindow=0;this.attackQueued=false;this.input={moveX:0,moveY:0,jump:false,attack:false,block:false,dodge:false,heal:false};this.renderer=new AngelKnightRenderer()}
   setState(next,force=false){if(this.state===next&&!force)return;this.state=next;this.renderer.setState(next,force)}

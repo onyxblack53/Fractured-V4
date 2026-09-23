@@ -1,44 +1,21 @@
-FRACTURED: THE DARKNESS — CLEAN NEW SERVER BUILD
+FRACTURED: THE DARKNESS — FLAT SERVER BUILD
 
-This package is a fresh static rebuild using the working systems from the previous prototypes.
-No framework, build tool, database, or Node server is required.
+This build is specifically made for uploaders that CANNOT upload folders.
 
-UPLOAD THE ENTIRE FOLDER AS-IS.
-The relative file structure must be preserved.
+UPLOAD EVERY FILE IN THIS ZIP DIRECTLY INTO THE SAME SERVER/REPOSITORY ROOT.
+Do not create folders.
 
-Included systems:
-- Start screen
-- Full Blooded / Half Blooded selection
-- 10 races
-- 6 classes
-- Loading screen
-- Shattered Kingdom world background
-- Stone bridge ground aligned to 75.5% physics ground
-- Mobile movement pad
-- Separate Jump button
-- Attack / Block / Heal / Dodge
-- Ability buttons I / II / III
-- Angel Knight Character and Inventory menus
-- 32 individual transparent Angel Knight PNG animation frames
-- Idle / Walk / Run / Jump / Fall / Block / Dodge / 3-hit attack combo / Heal
+The 32 animation PNGs all have unique names:
+idle_0.png ... idle_3.png
+run_0.png ... run_3.png
+jump_0.png ... jump_3.png
+block_0.png ... block_3.png
+dodge_0.png ... dodge_3.png
+attack1_0.png ... attack1_3.png
+attack2_0.png ... attack2_3.png
+attack3_0.png ... attack3_3.png
 
-MAIN FILES:
-index.html
-styles.css
-main.js
-creator.js
-player.js
-renderer.js
-controls.js
-menus.js
+renderer.js maps every animation state to those exact files.
+There is NO assets folder and NO angel_frames folder.
 
-ASSETS:
-assets/shattered_kingdom_world.jpeg
-assets/angel_frames/idle/0.png ... 3.png
-assets/angel_frames/run/0.png ... 3.png
-assets/angel_frames/jump/0.png ... 3.png
-assets/angel_frames/block/0.png ... 3.png
-assets/angel_frames/dodge/0.png ... 3.png
-assets/angel_frames/attack1/0.png ... 3.png
-assets/angel_frames/attack2/0.png ... 3.png
-assets/angel_frames/attack3/0.png ... 3.png
+Keep index.html in the same directory as every JS, CSS, PNG, and JPEG file.
