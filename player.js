@@ -190,7 +190,7 @@ export class Player{
     this.x+=this.vx*dt;
 
     const margin=45;
-    const maxX=Math.max(margin,window.innerWidth-margin);
+    const maxX=Math.max(margin,(this.worldWidth || window.innerWidth)-margin);
     this.x=Math.max(margin,Math.min(maxX,this.x));
   }
 
