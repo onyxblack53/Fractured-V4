@@ -1,109 +1,70 @@
-// FRACTURED — Angel Knight Animation Definitions
-// Replacement file for the 32-PNG animation pipeline.
-// Update BASE_PATH only if your PNGs live somewhere else.
+// Updated Angel Knight animation map using the fixed replacement PNGs.
+// The 6 broken frames were swapped with repaired versions:
+// attack1_1, attack1_2, attack2_1, attack2_2, attack3_1, attack3_2
 
-export const ANGEL_KNIGHT_BASE_PATH = "assets/angel-knight/";
+export const ANGEL_KNIGHT_BASE_PATH = "assets/angel-knight-fixed/";
+const f = (name, options = {}) => ({ id:name, src:`${ANGEL_KNIGHT_BASE_PATH}${name}.png`, x:0, y:0, ...options });
 
-const f = (n, options = {}) => ({
-  id: n,
-  src: `${ANGEL_KNIGHT_BASE_PATH}${n}.png`,
-  x: 0,
-  y: 0,
-  ...options
-});
-
-/*
-  IMPORTANT:
-  The groups below use all 32 numbered PNGs.
-  If your pose order differs, only change the frame numbers in this file.
-  The renderer does not need to be rewritten.
-
-  Idle is deliberately conservative:
-  - lower FPS
-  - no programmed horizontal bob
-  - no programmed vertical bob
-  The renderer will normalize the visible artwork to a fixed foot anchor.
-*/
 export const ANGEL_KNIGHT_ANIMATIONS = {
   idle: {
     fps: 5,
     loop: true,
     lockBody: true,
-    frames: [f(1), f(2), f(3), f(4)]
+    frames: [f('idle_0'), f('idle_1'), f('idle_2'), f('idle_3')]
   },
-
   walk: {
+    fps: 8,
+    loop: true,
+    frames: [f('run_0'), f('run_1'), f('run_2'), f('run_3')]
+  },
+  run: {
     fps: 10,
     loop: true,
-    lockBody: false,
-    frames: [f(5), f(6), f(7), f(8), f(9), f(10)]
+    frames: [f('run_0'), f('run_1'), f('run_2'), f('run_3')]
   },
-
-  run: {
-    fps: 12,
-    loop: true,
-    lockBody: false,
-    frames: [f(11), f(12), f(13), f(14)]
-  },
-
   jump: {
     fps: 9,
     loop: false,
     holdLastFrame: true,
-    lockBody: false,
-    frames: [f(15), f(16), f(17)]
+    frames: [f('jump_0'), f('jump_1'), f('jump_2'), f('jump_3')]
   },
-
   fall: {
     fps: 7,
     loop: true,
-    lockBody: false,
-    frames: [f(18), f(19)]
+    frames: [f('jump_2'), f('jump_3')]
   },
-
-  attack1: {
-    fps: 13,
-    loop: false,
-    returnTo: "idle",
-    lockBody: false,
-    frames: [f(20), f(21), f(22), f(23)]
-  },
-
-  attack2: {
-    fps: 14,
-    loop: false,
-    returnTo: "idle",
-    lockBody: false,
-    frames: [f(24), f(25), f(26), f(27)]
-  },
-
-  block: {
-    fps: 7,
-    loop: true,
-    lockBody: true,
-    frames: [f(28), f(29)]
-  },
-
   dodge: {
     fps: 14,
     loop: false,
-    returnTo: "idle",
-    lockBody: false,
-    frames: [f(30), f(31)]
+    returnTo: 'idle',
+    frames: [f('dodge_0'), f('dodge_1'), f('dodge_2'), f('dodge_3')]
   },
-
-  heal: {
-    fps: 6,
+  block: {
+    fps: 5,
     loop: true,
     lockBody: true,
-    frames: [f(32)]
+    frames: [f('block_0'), f('block_1'), f('block_2'), f('block_3')]
+  },
+  attack1: {
+    fps: 11,
+    loop: false,
+    returnTo: 'idle',
+    frames: [f('attack1_0'), f('attack1_1'), f('attack1_2'), f('attack1_3')]
+  },
+  attack2: {
+    fps: 11,
+    loop: false,
+    returnTo: 'idle',
+    frames: [f('attack2_0'), f('attack2_1'), f('attack2_2'), f('attack2_3')]
+  },
+  attack3: {
+    fps: 10,
+    loop: false,
+    returnTo: 'idle',
+    frames: [f('attack3_0'), f('attack3_1'), f('attack3_2'), f('attack3_3')]
   }
 };
 
 export function getAnimation(name) {
   return ANGEL_KNIGHT_ANIMATIONS[name] || ANGEL_KNIGHT_ANIMATIONS.idle;
-}
-
-export function listAngelKnightFrames() {
-  return Array.from({ length: 32 }, (_, i) => i + 1);
 }
