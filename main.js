@@ -1,7 +1,7 @@
-import {CharacterCreator} from "./creator.js";
-import {Player} from "./player.js?v=9";
-import {bindControls} from "./controls.js";
-import {initMenus} from "./menus.js";
+import {CharacterCreator} from "./creator.js?v=11";
+import {Player} from "./player.js?v=11";
+import {bindControls} from "./controls.js?v=11";
+import {initMenus} from "./menus.js?v=11";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
 let player=null,buildConfig=null,controlsBound=false,last=performance.now();

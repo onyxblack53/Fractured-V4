@@ -1,7 +1,7 @@
 // FRACTURED V4 — active flat-file Angel Knight renderer, v9.
 // Images live next to index.html: idle_0.png, attack1_2.png, etc.
 // This is the renderer imported by player.js.
-const ASSET_VERSION = '9';
+const ASSET_VERSION = '11';
 const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
 export const SPRITE_ANIMS = {
   idle:     {files:['idle_0.png'],fps:1,loop:true},

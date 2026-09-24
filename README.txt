@@ -1,20 +1,19 @@
-FRACTURED actual idle fix v5
+FRACTURED V4 — START SCREEN FIX v7
 
-Root cause found in the live GitHub code:
-player.js imports angelKnightSpriteRenderer.js, not angelKnightRenderer.js.
+The live index.html still loads ./main.js?v=2. Old cached versions may try to
+import nonexistent ./menu.js and leave START unresponsive.
 
-Changes:
-1. angelKnightSpriteRenderer.js idle animation now uses ONLY idle/0.png.
-2. Renderer update() freezes frame/time entirely while state === "idle".
-3. player.js snaps residual horizontal velocity below 0.5 to exactly 0.
-4. Cache-busting updated:
-   main.js -> player.js?v=7
-   player.js -> angelKnightSpriteRenderer.js?v=8
-   sprite PNG URLs -> ?v=8
-
-Replace these three files in the active build:
+Replace these repository-root files:
 - main.js
 - player.js
 - angelKnightSpriteRenderer.js
 
-All other gameplay and attack state logic remains unchanged.
+Then change index.html at the bottom to:
+<script type="module" src="./main.js?v=11"></script>
+
+Alternatively run PATCH_INDEX.py in a local checkout. That also adds a red
+startup-error message box in case another problem appears.
+
+Commit all four file changes together, wait for GitHub Pages, and reload.
+All images, repaired attack assets and Beta 1 remain unchanged.
+This ZIP does not modify GitHub directly.
