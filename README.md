@@ -1,30 +1,23 @@
-# Updated code + PNG swap package
+# FRACTURED — Idle Static Fix v4
 
-This package replaces the 6 broken attack frames in code with the repaired PNGs.
+This version fixes the remaining standing-still movement seen in the latest recording.
 
-## Replaced frames
-- attack1_1.png -> repaired frontal slash frame
-- attack1_2.png -> repaired frontal slash frame (second variant)
-- attack2_1.png -> repaired horizontal ring slash
-- attack2_2.png -> repaired horizontal ring slash (second variant)
-- attack3_1.png -> repaired large grounded crescent slash
-- attack3_2.png -> repaired airborne crescent slash
+## Change
+Idle no longer cycles through four separate full-body PNGs.
 
-## Files to use
-- `angelKnightAnimations.js`
-- `angelKnightRenderer.js`
-- `assets/angel-knight-fixed/*.png`
+When the player is not moving, the renderer now holds:
+- `idle_0.png`
 
-## Base path in code
-The animation file expects the PNGs at:
-`assets/angel-knight-fixed/`
+This guarantees that the knight's body, feet, shield, sword, halo, and wings do not shift while no controls are pressed.
 
-## If you already use my earlier package
-You can overwrite the old animation JS with this new one and swap the PNG folder to `assets/angel-knight-fixed/`.
+## Unchanged
+- Run
+- Jump
+- Dodge
+- Block
+- Attack 1
+- Attack 2
+- Attack 3
+- All six previously repaired attack PNGs
 
-
-## v3 idle stability fix
-- Idle/body-locked states now anchor from the lower feet/body instead of the whole silhouette.
-- This prevents changing wing shapes from shifting the entire knight.
-- Added tiny per-idle-frame correction offsets after frame registration.
-- The six repaired attack PNGs from v2 are unchanged.
+This is built on top of the prior idle-stability package.

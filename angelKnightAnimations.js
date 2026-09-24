@@ -7,10 +7,12 @@ const f = (name, options = {}) => ({ id:name, src:`${ANGEL_KNIGHT_BASE_PATH}${na
 
 export const ANGEL_KNIGHT_ANIMATIONS = {
   idle: {
-    fps: 5,
+    fps: 1,
     loop: true,
     lockBody: true,
-    frames: [f('idle_0'), f('idle_1', {x:-1, y:1}), f('idle_2', {x:-2, y:-3}), f('idle_3', {x:-1, y:1})]
+    // Hold one neutral frame when there is no input.
+    // This removes all full-body idle shifting completely.
+    frames: [f('idle_0')]
   },
   walk: {
     fps: 8,
