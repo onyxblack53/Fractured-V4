@@ -255,10 +255,31 @@ function cleanAndCropImage(img, options) {
   const anchorX = (bounds.minX + bounds.maxX) / 2 - crop.minX;
   const anchorY = bounds.maxY - crop.minY + 1;
 
+  // Stable lower-body / foot anchor.
+  // The old midpoint anchor included wings and large slash VFX, which made
+  // the knight slide sideways when an idle wing changed shape.
+  const visibleHeight = Math.max(1, bounds.maxY - bounds.minY + 1);
+  const footBandTop = Math.max(bounds.minY, bounds.maxY - Math.round(visibleHeight * 0.12));
+  const footXs = [];
+  for (let y = footBandTop; y <= bounds.maxY; y++) {
+    for (let x = bounds.minX; x <= bounds.maxX; x++) {
+      const a = imageData.data[(y * source.width + x) * 4 + 3];
+      if (a > options.alphaThreshold) footXs.push(x);
+    }
+  }
+  footXs.sort((a, b) => a - b);
+  const footMedianX = footXs.length
+    ? footXs[Math.floor(footXs.length / 2)]
+    : (bounds.minX + bounds.maxX) / 2;
+  const footAnchorX = footMedianX - crop.minX;
+  const footAnchorY = anchorY;
+
   return {
     canvas: cleaned,
     anchorX,
     anchorY,
+    footAnchorX,
+    footAnchorY,
     width: cropW,
     height: cropH,
     originalWidth: source.width,
@@ -439,8 +460,17 @@ export class AngelKnightRenderer {
     const drawW = frame.width * scale;
     const drawH = frame.height * scale;
 
-    const anchorX = frame.anchorX * scale;
-    const anchorY = frame.anchorY * scale;
+    // Body-locked animations (idle/block) use the lower-body anchor so wing
+    // motion cannot pull the entire character left/right. Other animations
+    // retain the normal visual-center anchor for broad action poses.
+    const sourceAnchorX = bodyLocked && Number.isFinite(frame.footAnchorX)
+      ? frame.footAnchorX
+      : frame.anchorX;
+    const sourceAnchorY = bodyLocked && Number.isFinite(frame.footAnchorY)
+      ? frame.footAnchorY
+      : frame.anchorY;
+    const anchorX = sourceAnchorX * scale;
+    const anchorY = sourceAnchorY * scale;
 
     const fx = (def.x || 0) + this.offsetX;
     const fy = (def.y || 0) + this.offsetY;

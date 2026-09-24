@@ -10,7 +10,7 @@ export const ANGEL_KNIGHT_ANIMATIONS = {
     fps: 5,
     loop: true,
     lockBody: true,
-    frames: [f('idle_0'), f('idle_1'), f('idle_2'), f('idle_3')]
+    frames: [f('idle_0'), f('idle_1', {x:-1, y:1}), f('idle_2', {x:-2, y:-3}), f('idle_3', {x:-1, y:1})]
   },
   walk: {
     fps: 8,

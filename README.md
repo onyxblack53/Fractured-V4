@@ -21,3 +21,10 @@ The animation file expects the PNGs at:
 
 ## If you already use my earlier package
 You can overwrite the old animation JS with this new one and swap the PNG folder to `assets/angel-knight-fixed/`.
+
+
+## v3 idle stability fix
+- Idle/body-locked states now anchor from the lower feet/body instead of the whole silhouette.
+- This prevents changing wing shapes from shifting the entire knight.
+- Added tiny per-idle-frame correction offsets after frame registration.
+- The six repaired attack PNGs from v2 are unchanged.
