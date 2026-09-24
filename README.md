@@ -1,24 +1,21 @@
-# FRACTURED V4 — Blood Moon Background v14
+# FRACTURED V4 — Background Clarity Fix v15
 
-This package swaps the game's current scenery to the new user-selected Blood Moon panorama while keeping the 10-screen-wide scrolling map.
+This update improves the background quality and corrects the moon distortion.
+
+## What changed
+- switched from the smaller panorama to the higher-resolution `blood_moon_over_the_gothic_valley.png`
+- preserved the artwork aspect ratio using `object-fit: cover` instead of `fill`
+- adjusted vertical framing so the scene sits naturally behind the bridge and UI
+- kept the 10-screen scrolling world, player, HUD, controls, and combat unchanged
 
 ## Included
 - `main.js`
 - `worldExtension.js`
-- `fractured_bloodmoon_panorama.png`
-
-## What changed
-- The active game background is now forced to `fractured_bloodmoon_panorama.png`
-- The map remains 10× wider than one screen
-- The camera still follows the Angel Knight horizontally
-- The bridge, player, controls, HUD, combat, and repaired attack PNGs are unchanged
+- `fractured_bloodmoon_panorama_hd.png`
 
 ## Install
-1. In the Fractured-V4 repository root, replace `main.js` and `worldExtension.js` with the files in this package.
-2. Add `fractured_bloodmoon_panorama.png` to the repository root.
+1. Replace `main.js` and `worldExtension.js` in the repository root.
+2. Add `fractured_bloodmoon_panorama_hd.png` to the repository root.
 3. Update the last script tag in `index.html` to:
-   `<script type="module" src="./main.js?v=14"></script>`
-4. Commit, wait for GitHub Pages to deploy, then refresh the site.
-
-## Notes
-This background is treated as the game's world backdrop image. If you later want the sky itself animated (drifting fog, pulsing moon glow, portal effects, parallax ruins, etc.), that can be added on top of this baseline.
+   `<script type="module" src="./main.js?v=15"></script>`
+4. Commit, wait for GitHub Pages, and refresh.

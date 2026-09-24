@@ -1,9 +1,9 @@
-// FRACTURED V4 — Blood Moon panorama background (v14)
-// Uses the user-selected wide panorama as the active game background
-// while preserving the 10-screen horizontal world and camera.
+// FRACTURED V4 — Background clarity fix (v15)
+// Uses the higher-resolution Blood Moon panorama and preserves its aspect ratio
+// so the moon/castle are not distorted on tall mobile screens.
 export const WORLD_SCREENS = 10;
 const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
-const BACKGROUND_SRC = './fractured_bloodmoon_panorama.png?v=14';
+const BACKGROUND_SRC = './fractured_bloodmoon_panorama_hd.png?v=15';
 
 export class WorldExtension {
   constructor() {
@@ -14,23 +14,26 @@ export class WorldExtension {
     const original = document.getElementById('world-background');
     if (!art || !original) throw new Error('FRACTURED: missing #world-art or #world-background');
 
-    // Force the active background to the new Blood Moon panorama.
     original.src = BACKGROUND_SRC;
-    original.alt = 'FRACTURED Blood Moon panorama';
+    original.alt = 'FRACTURED Blood Moon panorama HD';
 
     const track = document.createElement('div');
     track.id = 'fractured-world-track';
     Object.assign(track.style, {
       position: 'absolute', left: '0', top: '0', height: '100%',
-      pointerEvents: 'none', zIndex: '0', willChange: 'transform',
-      overflow: 'hidden'
+      pointerEvents: 'none', zIndex: '0', willChange: 'transform', overflow: 'hidden'
     });
     original.parentNode.insertBefore(track, original);
     track.appendChild(original);
+
     Object.assign(original.style, {
-      display: 'block', position: 'absolute', top: '0', left: '0',
-      width: '100%', height: '100%', objectFit: 'fill', objectPosition: 'center',
-      transform: 'none', maxWidth: 'none', pointerEvents: 'none'
+      display: 'block', position: 'absolute', inset: '0',
+      width: '100%', height: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center 52%',
+      transform: 'translateZ(0)',
+      maxWidth: 'none', pointerEvents: 'none',
+      imageRendering: 'auto'
     });
 
     this.track = track;
