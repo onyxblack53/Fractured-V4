@@ -1,21 +1,20 @@
-FRACTURED: THE DARKNESS — FLAT SERVER BUILD
+FRACTURED actual idle fix v5
 
-This build is specifically made for uploaders that CANNOT upload folders.
+Root cause found in the live GitHub code:
+player.js imports angelKnightSpriteRenderer.js, not angelKnightRenderer.js.
 
-UPLOAD EVERY FILE IN THIS ZIP DIRECTLY INTO THE SAME SERVER/REPOSITORY ROOT.
-Do not create folders.
+Changes:
+1. angelKnightSpriteRenderer.js idle animation now uses ONLY idle/0.png.
+2. Renderer update() freezes frame/time entirely while state === "idle".
+3. player.js snaps residual horizontal velocity below 0.5 to exactly 0.
+4. Cache-busting updated:
+   main.js -> player.js?v=7
+   player.js -> angelKnightSpriteRenderer.js?v=8
+   sprite PNG URLs -> ?v=8
 
-The 32 animation PNGs all have unique names:
-idle_0.png ... idle_3.png
-run_0.png ... run_3.png
-jump_0.png ... jump_3.png
-block_0.png ... block_3.png
-dodge_0.png ... dodge_3.png
-attack1_0.png ... attack1_3.png
-attack2_0.png ... attack2_3.png
-attack3_0.png ... attack3_3.png
+Replace these three files in the active build:
+- main.js
+- player.js
+- angelKnightSpriteRenderer.js
 
-renderer.js maps every animation state to those exact files.
-There is NO assets folder and NO angel_frames folder.
-
-Keep index.html in the same directory as every JS, CSS, PNG, and JPEG file.
+All other gameplay and attack state logic remains unchanged.
