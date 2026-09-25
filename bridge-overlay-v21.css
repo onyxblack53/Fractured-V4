@@ -1,0 +1,17 @@
+/* FRACTURED V4 v21 — visual overlay only. No physics or character changes. */
+#stone-bridge { isolation: isolate; overflow: visible; }
+#stone-bridge .bridge-lip { display: none !important; }
+#stone-bridge .bridge-face { background: none !important; }
+#stone-bridge::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: -8px 0 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: url("./fractured_bridge_overlay_v21.png?v=21");
+  background-repeat: repeat-x;
+  background-position: left top;
+  background-size: auto 100%;
+  image-rendering: auto;
+}
