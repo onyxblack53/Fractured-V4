@@ -1,11 +1,13 @@
-// FRACTURED V4 — active flat-file Angel Knight renderer, v27.
+// FRACTURED V4 — active flat-file Angel Knight renderer, v31.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '11';
 // idle_0.png is 900px tall; its last 41 rows are transparent.
-// Compensate for this intrinsic padding so the actual boots, not the PNG's
-// transparent bounding box, touch the bridge's physical collision surface.
 const SPRITE_SOURCE_HEIGHT = 900;
 const FOOT_TRANSPARENT_SOURCE_PX = 41;
+// The existing transparent-padding correction still left a visible gap on the
+// mobile bridge. This is a SCREEN/CANVAS pixel inset, applied only to artwork.
+// Do not move groundY or the collision plane to compensate for sprite pixels.
+const BOOT_CONTACT_INSET_PX = 10;
 const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
 export const SPRITE_ANIMS = {
   idle:     {files:['idle_0.png'],fps:1,loop:true},
@@ -86,13 +88,12 @@ export class AngelKnightSpriteRenderer {
     const frames = this.images[this.state] || this.images.idle;
     const img = frames[Math.min(this.frame,frames.length-1)];
     if (!img || !img.complete || !img.naturalWidth) return;
-    // Lower artwork only. groundY, jump arcs and hitboxes remain unchanged.
     const width=targetHeight, left=x-width/2;
     const footPadding=targetHeight*FOOT_TRANSPARENT_SOURCE_PX/SPRITE_SOURCE_HEIGHT;
-    const top=groundY-targetHeight+footPadding;
+    // One visual offset for all states, including airborne frames: no physics,
+    // jump-arc, hitbox, camera, bridge, or input changes.
+    const top=groundY-targetHeight+footPadding+BOOT_CONTACT_INSET_PX;
     ctx.save();
-    // Contact shadow is anchored to the collision surface, not the sprite frame.
-    // Only draw while grounded, so jumps do not carry a floating shadow.
     if (onGround) {
       ctx.save();
       ctx.fillStyle = 'rgba(0,0,0,0.34)';
