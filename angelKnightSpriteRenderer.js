@@ -1,7 +1,11 @@
 // FRACTURED V4 — active flat-file Angel Knight renderer, v27.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '11';
-const BOOT_ALIGNMENT_PX = 4;
+// idle_0.png is 900px tall; its last 41 rows are transparent.
+// Compensate for this intrinsic padding so the actual boots, not the PNG's
+// transparent bounding box, touch the bridge's physical collision surface.
+const SPRITE_SOURCE_HEIGHT = 900;
+const FOOT_TRANSPARENT_SOURCE_PX = 41;
 const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
 export const SPRITE_ANIMS = {
   idle:     {files:['idle_0.png'],fps:1,loop:true},
@@ -83,7 +87,9 @@ export class AngelKnightSpriteRenderer {
     const img = frames[Math.min(this.frame,frames.length-1)];
     if (!img || !img.complete || !img.naturalWidth) return;
     // Lower artwork only. groundY, jump arcs and hitboxes remain unchanged.
-    const width=targetHeight, left=x-width/2, top=groundY-targetHeight+BOOT_ALIGNMENT_PX;
+    const width=targetHeight, left=x-width/2;
+    const footPadding=targetHeight*FOOT_TRANSPARENT_SOURCE_PX/SPRITE_SOURCE_HEIGHT;
+    const top=groundY-targetHeight+footPadding;
     ctx.save();
     // Contact shadow is anchored to the collision surface, not the sprite frame.
     // Only draw while grounded, so jumps do not carry a floating shadow.
