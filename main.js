@@ -2,12 +2,12 @@ import {CharacterCreator} from "./creator.js?v=11";
 import {Player} from "./player.js?v=12";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=11";
-import {WorldExtension,WORLD_SCREENS} from "./worldExtension.js?v=15";
+import {WorldExtension} from "./worldExtension.js?v=17";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
 let player=null,buildConfig=null,controlsBound=false,last=performance.now();
 const world=new WorldExtension();
-window.FRACTURED_MAP={screens:WORLD_SCREENS,get worldWidth(){return world.worldWidth},get cameraX(){return world.cameraX}};
+window.FRACTURED_MAP={get screens(){return world.worldWidth/world.viewportWidth},get worldWidth(){return world.worldWidth},get cameraX(){return world.cameraX}};
 function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();if(player){player.worldWidth=world.worldWidth;player.groundY=h*GROUND_RATIO;if(player.onGround)player.y=player.groundY;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}}
 addEventListener("resize",resize,{passive:true});resize();
 function enterWorld(config){buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,innerHeight*GROUND_RATIO);player.worldWidth=world.worldWidth;world.setCamera(0);window.FRACTURED.angelKnight=player;if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=`${config.races.join(" / ")} · ${config.className}`;resize();last=performance.now()}
