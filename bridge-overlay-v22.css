@@ -1,0 +1,19 @@
+/* v22: world-anchored seamless bridge tile; the existing WorldExtension.setCamera
+   already updates .bridge-face background-position every frame. Inherit it here. */
+#stone-bridge { isolation:isolate; overflow:hidden; }
+#stone-bridge .bridge-lip { display:none !important; }
+#stone-bridge .bridge-face {
+  inset:0 !important;
+  background-image:none !important;
+  background-color:transparent !important;
+  background-repeat:repeat-x;
+}
+#stone-bridge::after { content:none !important; }
+#stone-bridge .bridge-face::after {
+  content:""; position:absolute; inset:-8px 0 0; pointer-events:none;
+  background-image:url("./fractured_bridge_tile_v22.png?v=22");
+  background-repeat:repeat-x;
+  background-position:inherit;
+  background-size:auto 100%;
+  image-rendering:auto;
+}

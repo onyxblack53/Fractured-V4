@@ -1,5 +1,3 @@
-FRACTURED V4 — BRIDGE OVERLAY v21
-
-Upload index.html, bridge-overlay-v21.css, and fractured_bridge_overlay_v21.png to the repository ROOT, replacing index.html. Commit.
-
-This places the supplied bridge artwork directly over the existing stone ground using a separate CSS overlay. No gameplay JavaScript, controls, background panorama, physics, or animation files are changed. The existing stone remains beneath the overlay.
+FRACTURED V4 Bridge World Scroll v22
+Upload index.html, bridge-overlay-v22.css and fractured_bridge_tile_v22.png to repository root, replacing index.html. Keep all existing files.
+The tile repeats seamlessly and follows cameraX via the existing worldExtension.js .bridge-face background-position. Ground physics and other game systems unchanged.
