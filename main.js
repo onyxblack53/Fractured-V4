@@ -8,20 +8,16 @@ const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=do
 let player=null,buildConfig=null,controlsBound=false,last=performance.now();
 const world=new WorldExtension();
 window.FRACTURED_MAP={get screens(){return world.worldWidth/world.viewportWidth},get worldWidth(){return world.worldWidth},get cameraX(){return world.cameraX}};
-// The bridge's visible tile edge is the only ground reference. Its strip is
-// positioned 8px above #stone-bridge by bridge-overlay-v23.css; reading its
-// actual rectangle avoids separate rounded CSS/JS ground calculations.
+// The bridge artwork is clipped by #stone-bridge (overflow:hidden).
+// Its child strip starts at -8px, but those pixels are NOT visible ground.
+// Use the visible bridge container edge, with a 2px stone-surface inset.
 function bridgeSurfaceY(){
-  const strip=document.getElementById("fractured-bridge-world-v23");
-  const canvasTop=canvas.getBoundingClientRect().top;
-  if(strip && strip.getBoundingClientRect().height>0){
-    return strip.getBoundingClientRect().top-canvasTop;
-  }
   const bridge=document.getElementById("stone-bridge");
+  const canvasTop=canvas.getBoundingClientRect().top;
   if(bridge && bridge.getBoundingClientRect().height>0){
-    return bridge.getBoundingClientRect().top-canvasTop-8;
+    return bridge.getBoundingClientRect().top-canvasTop+2;
   }
-  return innerHeight*GROUND_RATIO-8;
+  return innerHeight*GROUND_RATIO+2;
 }
 function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();if(player){player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();if(player.onGround)player.y=player.groundY;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}}
 addEventListener("resize",resize,{passive:true});resize();
