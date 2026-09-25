@@ -1,19 +1,16 @@
-FRACTURED V4 — Single Goblin Prototype (V32)
+FRACTURED V4 — Goblin NPC separation fix V33
 
-Upload these files to the ROOT of your Fractured-V4 repository:
-  main.js
-  index.html
-  goblinEnemy.js
-  goblin/ (entire folder, including every PNG)
+Upload these files into the ROOT of your existing Fractured-V4 repository,
+preserving the goblin/ directory. Replace main.js, index.html and
+goblinEnemy.js. The goblin PNGs are included again for completeness.
 
-Replace only main.js and index.html; goblinEnemy.js and goblin/ are new.
-Do not remove or overwrite player.js, angelKnightSpriteRenderer.js,
-bridge/world files, the panorama, or existing knight PNGs.
+Do NOT overwrite player.js, angelKnightSpriteRenderer.js, controls.js,
+knight PNGs, bridge files or background assets.
 
-The enemy appears just to the right of the player when entering the world.
-Its 100-HP bar is above its head. It patrols, approaches, attacks, blocks,
-jumps, lands, and plays hurt/death frames. The knight's attack hitboxes
-can damage it. There is exactly one goblin; it does not respawn.
+The Angel Knight remains the sole player-controlled character. The goblin
+is a separate AI object, spawned ahead of the player; it patrols, chases,
+attacks, blocks, jumps, lands and has its own 100-HP bar. The NPC maintains
+138 canvas-pixel center separation from the knight so the two sprites cannot
+appear fused while standing or walking. Its attacks reach across that gap.
 
-Source: supplied goblin animation sheet. Frame cutouts are prototype
-extractions from the generated sheet; art cleanup can be done later.
+On iPhone Safari, reload the site after GitHub Pages deploys so v33 loads.

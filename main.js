@@ -1,6 +1,6 @@
 import {CharacterCreator} from "./creator.js?v=11";
 import {Player} from "./player.js?v=31";
-import {GoblinEnemy} from "./goblinEnemy.js?v=1";
+import {GoblinEnemy} from "./goblinEnemy.js?v=33";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=11";
 import {WorldExtension} from "./worldExtension.js?v=20";
@@ -22,7 +22,7 @@ function bridgeSurfaceY(){
 }
 function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();if(player){player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();if(player.onGround)player.y=player.groundY;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(goblin){goblin.groundY=bridgeSurfaceY();if(goblin.onGround)goblin.y=goblin.groundY;}}
 addEventListener("resize",resize,{passive:true});resize();
-function enterWorld(config){buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY());player.worldWidth=world.worldWidth;goblin=new GoblinEnemy(Math.min(world.worldWidth-70,player.x+Math.min(210,innerWidth*.46)),bridgeSurfaceY());world.setCamera(0);window.FRACTURED.angelKnight=player;if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=`${config.races.join(" / ")} · ${config.className}`;resize();last=performance.now()}
+function enterWorld(config){buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY());player.worldWidth=world.worldWidth;goblin=new GoblinEnemy(Math.min(world.worldWidth-70,player.x+Math.max(320,innerWidth*.90)),bridgeSurfaceY());world.setCamera(0);window.FRACTURED.angelKnight=player;if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=`${config.races.join(" / ")} · ${config.className}`;resize();last=performance.now()}
 function beginGame(config){buildConfig=config;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));const loading=document.getElementById("loading-screen");loading.classList.add("active");loadingBuild.textContent=`${config.races.join(" / ")} · ${config.className}`;loadingFill.style.width="0%";const steps=[14,36,58,80,100];let i=0;const tick=()=>{loadingFill.style.width=steps[i]+"%";i++;if(i<steps.length)setTimeout(tick,140);else setTimeout(()=>enterWorld(config),220)};setTimeout(tick,80)}
 window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,menuPaused:false};
 new CharacterCreator(beginGame);initMenus(()=>buildConfig);

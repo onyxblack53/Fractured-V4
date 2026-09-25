@@ -6,6 +6,10 @@ const ANIMS = {
   jump:[4,9,false], land:[3,10,false], hurt:[4,11,false], death:[5,7,false]
 };
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+// The two characters have separate bodies and sprite renderers. Their image
+// rectangles are wider than their collision boxes, so prevent visual fusion.
+const BODY_SPACING=138;
+const ATTACK_RANGE=158;
 const overlap=(a,b)=>a.x < b.x+b.w && a.x+a.w>b.x && a.y<b.y+b.h && a.y+a.h>b.y;
 export class GoblinEnemy {
   constructor(x,groundY){
@@ -65,7 +69,7 @@ export class GoblinEnemy {
       }
       if(this.state.startsWith('attack')&&this.frame===2&&!this.attackConnected){
         this.attackConnected=true;
-        const reach=this.state==='attack2'?75:66;
+        const reach=ATTACK_RANGE;
         const dx=player.x-this.x;
         if(!player.dead&&Math.abs(dx)<reach && Math.abs(player.y-this.y)<76 && dx*this.facing>0){
           player.damage(this.state==='attack2'?14:10,this.x);
@@ -80,18 +84,18 @@ export class GoblinEnemy {
       if(chasing){
         this.facing=dx>=0?1:-1;
         // Defensive block when a sword swing is approaching.
-        if(dist<98&&player.state.startsWith('attack')&&this.state!=='block'&&Math.random()<dt*2.8){
+        if(dist<ATTACK_RANGE&&player.state.startsWith('attack')&&this.state!=='block'&&Math.random()<dt*2.8){
           this.setState('block');this.decision=.45;
         }
         if(this.state==='block'){
           this.vx=0;this.decision-=dt;
           if(this.decision<=0)this.setState('idle');
-        }else if(dist<73&&this.onGround&&this.attackCooldown===0){
+        }else if(dist<=ATTACK_RANGE&&this.onGround&&this.attackCooldown===0){
           this.vx=0;this.setState(Math.random()<.4?'attack2':'attack1',true);
           this.attackCooldown=1.5+Math.random()*.45;
-        }else if(dist>62){
-          this.vx=this.facing*(dist>155?126:64);
-          if(this.onGround)this.setState(dist>155?'run':'walk');
+        }else if(dist>BODY_SPACING+3){
+          this.vx=this.facing*(dist>210?126:64);
+          if(this.onGround)this.setState(dist>210?'run':'walk');
           if(dist>125&&this.jumpCooldown===0&&this.onGround&&Math.random()<dt*.38){
             this.onGround=false;this.vy=-400;this.jumpCooldown=4.5;
             this.setState('jump',true);
@@ -106,6 +110,17 @@ export class GoblinEnemy {
       }
     }else this.vx*=Math.max(0,1-9*dt);
     this.x=clamp(this.x+this.vx*dt,50,Math.max(50,worldWidth-50));
+    // Body collision is resolved in WORLD coordinates, after both actors
+    // update. The player remains controlled only by Player/bindControls.
+    // Move the NPC out of the player's visual body, never the knight sprite.
+    if(!this.dead && !player.dead && Math.abs(this.x-player.x)<BODY_SPACING){
+      const side=this.x>=player.x?1:-1;
+      let desired=player.x+side*BODY_SPACING;
+      if(desired<50 || desired>worldWidth-50)
+        desired=player.x-side*BODY_SPACING;
+      this.x=clamp(desired,50,Math.max(50,worldWidth-50));
+      this.vx=0;
+    }
     if(!this.onGround){
       this.vy+=1450*dt;this.y+=this.vy*dt;
       if(this.y>=this.groundY){this.y=this.groundY;this.vy=0;this.onGround=true;this.setState('land',true);}
