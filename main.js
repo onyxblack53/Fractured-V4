@@ -1,5 +1,5 @@
 import {CharacterCreator} from "./creator.js?v=11";
-import {Player} from "./player.js?v=12";
+import {Player} from "./player.js?v=25";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=11";
 import {WorldExtension} from "./worldExtension.js?v=20";
