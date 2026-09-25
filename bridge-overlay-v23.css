@@ -1,0 +1,11 @@
+/* v23: the bridge is a world-space strip, not a screen-space pseudo-element. */
+#stone-bridge { overflow:hidden !important; isolation:isolate; }
+#stone-bridge .bridge-lip, #stone-bridge .bridge-face { display:none !important; }
+#stone-bridge::before, #stone-bridge::after { content:none !important; }
+#fractured-bridge-world-v23 {
+ position:absolute; left:0; top:-8px; height:calc(100% + 8px);
+ pointer-events:none; z-index:3; will-change:transform;
+ background-image:url('./fractured_bridge_tile_v22.png?v=23');
+ background-repeat:repeat-x; background-position:0 0;
+ background-size:auto 100%; image-rendering:auto;
+}
