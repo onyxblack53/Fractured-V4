@@ -1,7 +1,7 @@
 // FRACTURED V4 — active flat-file Angel Knight renderer, v25.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '11';
-const BOOT_ALIGNMENT_PX = 20;
+const BOOT_ALIGNMENT_PX = 12;
 const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
 export const SPRITE_ANIMS = {
   idle:     {files:['idle_0.png'],fps:1,loop:true},
