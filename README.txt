@@ -1,26 +1,26 @@
-FRACTURED V4 — ANIMATED ATMOSPHERE v18
+FRACTURED V4 — Gothic bridge ground v19
 
-Built directly on the working V17 full-image background. No sprite, combat,
-HUD, controls, player physics, or bridge changes.
+Upload the three files in this package to the ROOT of your Fractured-V4 GitHub repository:
+  fractured_bridge_v19.webp (NEW)
+  worldExtension.js (REPLACE)
+  main.js (REPLACE)
 
-Effects:
-- subtle drifting translucent fog in the valley
-- gentle cloud-shadow motion (does not slide or crop the actual sky image)
-- circular Blood Moon glow pulse
-- purple portal aura, shimmer, and vertical beam
-- lightly parallaxed foreground firs and ruined stone silhouettes
+Then in index.html change ONLY the final script tag from
+  <script type="module" src="./main.js?v=2"></script>
+to
+  <script type="module" src="./main.js?v=19"></script>
+This avoids a stale mobile browser cache.
 
-The ORIGINAL V17 image remains one continuous 3:1 panorama; no tiling, mirroring,
-cover-cropping, zooming, or reshaping. Full sky height remains visible. Landscape
-is explored horizontally, as before. Animations are rendered separately at up to
-30fps, capped 1.5x pixel density, and respect reduced-motion settings.
+What changed:
+- Extracted the gothic bridge's stone walking surface, arch and pillars from the supplied photo.
+- Replaced only the synthetic CSS bridge face at 75.5% screen height.
+- Kept the player collision/feet at the existing ground ratio; no player or controls changes.
+- Bridge texture scrolls with the camera; the existing original panoramic sky, moon, castle,
+  atmospheric FX, sprite animations, menus, and controls are untouched.
+- No original background or sprite asset needs deleting.
 
-INSTALL:
-1. Upload/replace main.js and worldExtension.js in the repo root.
-2. Keep/upload fractured_world_v17.webp in the repo root.
-3. Update the final script tag in index.html to:
-   <script type="module" src="./main.js?v=18"></script>
-4. Commit and reload GitHub Pages after it deploys.
-5. Keep all other V17 files unchanged.
+IMPORTANT: This is a repeated structural bridge section so it can cover the scrolling map.
+The underlying source image is a portrait image, not a new hand-painted full-width bridge.
+Repeating arches are intentional; the sky and distant landmarks are NOT mirrored/repeated.
 
-Rollback: restore V17 main.js and worldExtension.js and main.js?v=17.
+Backup: keep your existing files before replacing them. Upload the image before the JS files.

@@ -1,4 +1,4 @@
-// FRACTURED V4 v18 — original supplied panorama, uncropped, proportionate, shorter world.
+// FRACTURED V4 v19 — original supplied panorama, uncropped, proportionate, shorter world.
 // The source is 3:1. The entire image fits above the bridge; the camera scrolls
 // across its natural width instead of stretching it to an arbitrary 10-screen map.
 export const WORLD_SCREENS = 4; // nominal mobile length; actual width is responsive.
@@ -56,6 +56,19 @@ export class WorldExtension {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.bridgeFace = document.querySelector('#stone-bridge .bridge-face');
     this.bridgeLip = document.querySelector('#stone-bridge .bridge-lip');
+    // V19: use the supplied gothic bridge photograph as the physical ground.
+    // The top of the image is the walking surface at 75.5% viewport height.
+    // Only the bridge section is extracted; the existing panorama stays intact.
+    if (this.bridgeFace) Object.assign(this.bridgeFace.style, {
+      inset: '0',
+      backgroundImage: 'url(./fractured_bridge_v19.webp?v=19)',
+      backgroundSize: 'auto 100%',
+      backgroundRepeat: 'repeat-x',
+      backgroundPosition: '0 0',
+      filter: 'none',
+      imageRendering: 'auto'
+    });
+    if (this.bridgeLip) this.bridgeLip.style.display = 'none';
     this.resize();
   }
 
@@ -92,8 +105,8 @@ export class WorldExtension {
     const limit = Math.max(0, this.worldWidth - this.viewportWidth);
     this.cameraX = Math.round(clamp(x, 0, limit) * dpr) / dpr;
     this.track.style.transform = `translate3d(${-this.cameraX}px,0,0)`;
-    if (this.bridgeFace) this.bridgeFace.style.backgroundPosition = `0 0, 0 0, ${-this.cameraX}px 0`;
-    if (this.bridgeLip) this.bridgeLip.style.backgroundPositionX = `${-this.cameraX}px`;
+    // Scroll the bridge texture with the world, not with the player's viewport.
+    if (this.bridgeFace) this.bridgeFace.style.backgroundPosition = `${-this.cameraX}px 0`;
     return this.cameraX;
   }
 
