@@ -2,7 +2,7 @@ import {CharacterCreator} from "./creator.js?v=11";
 import {Player} from "./player.js?v=12";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=11";
-import {WorldExtension} from "./worldExtension.js?v=17";
+import {WorldExtension} from "./worldExtension.js?v=18";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
 let player=null,buildConfig=null,controlsBound=false,last=performance.now();
@@ -15,4 +15,4 @@ function beginGame(config){buildConfig=config;document.querySelectorAll(".flow-s
 window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,menuPaused:false};
 new CharacterCreator(beginGame);initMenus(()=>buildConfig);
 ["ability1-btn","ability2-btn","ability3-btn"].forEach((id,i)=>document.getElementById(id).onclick=()=>{const toast=document.getElementById("toast"),labels=["Radiant Burst","Aegis of Heaven","Falling Star"];toast.textContent=labels[i]+" — ability ready";toast.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>toast.classList.remove("show"),850)});
-function frame(now){const dt=Math.min(.033,(now-last)/1000||.016);last=now;ctx.clearRect(0,0,innerWidth,innerHeight);if(player){if(!document.getElementById("rpgMenu").classList.contains("open"))player.update(dt);world.follow(player);ctx.save();ctx.translate(-world.cameraX,0);player.draw(ctx);ctx.restore();hpFill.style.width=`${player.hp/player.maxHp*100}%`;staminaFill.style.width=`${player.stamina/player.maxStamina*100}%`;stateLabel.textContent=player.state.toUpperCase()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+function frame(now){const dt=Math.min(.033,(now-last)/1000||.016);last=now;ctx.clearRect(0,0,innerWidth,innerHeight);if(player){if(!document.getElementById("rpgMenu").classList.contains("open"))player.update(dt);world.follow(player);world.render(now);ctx.save();ctx.translate(-world.cameraX,0);player.draw(ctx);ctx.restore();hpFill.style.width=`${player.hp/player.maxHp*100}%`;staminaFill.style.width=`${player.stamina/player.maxStamina*100}%`;stateLabel.textContent=player.state.toUpperCase()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
