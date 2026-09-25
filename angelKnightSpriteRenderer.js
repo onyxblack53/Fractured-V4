@@ -1,7 +1,7 @@
-// FRACTURED V4 — active flat-file Angel Knight renderer, v25.
+// FRACTURED V4 — active flat-file Angel Knight renderer, v27.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '11';
-const BOOT_ALIGNMENT_PX = 12;
+const BOOT_ALIGNMENT_PX = 4;
 const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
 export const SPRITE_ANIMS = {
   idle:     {files:['idle_0.png'],fps:1,loop:true},
@@ -78,13 +78,23 @@ export class AngelKnightSpriteRenderer {
     }
     return null;
   }
-  draw(ctx,x,groundY,facing=1,targetHeight=190){
+  draw(ctx,x,groundY,facing=1,targetHeight=190,onGround=true){
     const frames = this.images[this.state] || this.images.idle;
     const img = frames[Math.min(this.frame,frames.length-1)];
     if (!img || !img.complete || !img.naturalWidth) return;
     // Lower artwork only. groundY, jump arcs and hitboxes remain unchanged.
     const width=targetHeight, left=x-width/2, top=groundY-targetHeight+BOOT_ALIGNMENT_PX;
     ctx.save();
+    // Contact shadow is anchored to the collision surface, not the sprite frame.
+    // Only draw while grounded, so jumps do not carry a floating shadow.
+    if (onGround) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.34)';
+      ctx.beginPath();
+      ctx.ellipse(x, groundY + 1, 37, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
     if (facing<0) { ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0); }
     ctx.drawImage(img,left,top,width,targetHeight);
     ctx.restore();

@@ -1,4 +1,4 @@
-import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=26";
+import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=27";
 
 export class Player{
   constructor(x=300,y=500){
@@ -196,7 +196,7 @@ export class Player{
 
   draw(ctx){
     const h=Math.max(145,Math.min(210,window.innerHeight*.17));
-    this.renderer.draw(ctx,this.x,this.y,this.facing,h);
+    this.renderer.draw(ctx,this.x,this.y,this.facing,h,this.onGround);
   }
 
   damage(amount,fromX=this.x){
