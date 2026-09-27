@@ -1,6 +1,6 @@
 // FRACTURED V4 — active flat-file Angel Knight renderer, v31.
 // Visual-only boot alignment; does not change physics or collision groundY.
-const ASSET_VERSION = '11';
+const ASSET_VERSION = '35';
 // idle_0.png is 900px tall; its last 41 rows are transparent.
 const SPRITE_SOURCE_HEIGHT = 900;
 const FOOT_TRANSPARENT_SOURCE_PX = 41;

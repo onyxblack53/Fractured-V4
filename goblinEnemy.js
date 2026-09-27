@@ -3,7 +3,7 @@
 const ANIMS = {
   idle: [4,3,true], walk:[6,8,true], run:[8,12,true],
   attack1:[5,11,false], attack2:[3,9,false], block:[3,7,true],
-  jump:[4,9,false], land:[3,10,false], hurt:[4,11,false], death:[5,7,false]
+  jump:[4,9,false], land:[3,10,false], hurt:[4,11,false], death:[4,7,false]
 };
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 // The two characters have separate bodies and sprite renderers. Their image
@@ -18,14 +18,33 @@ export class GoblinEnemy {
     this.state='idle';this.frame=0;this.elapsed=0;this.onGround=true;
     this.dead=false;this.attackCooldown=1.2;this.decision=1.1;this.jumpCooldown=3;
     this.attackConnected=false;this.lastPlayerHitbox=null;this.hitFlash=0;
-    this.images={};
-    for(const [name,[count]] of Object.entries(ANIMS)){
-      this.images[name]=Array.from({length:count},(_,i)=>{
-        const img=new Image();img.src=`./goblin/${name}_${i}.png?v=1`;
-        img.onerror=()=>console.warn(`Missing goblin sprite: ${name}_${i}.png`);
-        return img;
+    // Versioned NPC-only directory: never reuse player frame filenames.
+    this.images = {};
+    this.assetsLoaded = false;
+    const cache = new Map();
+    const pending = [];
+    for (const [state, [count]] of Object.entries(ANIMS)) {
+      // Non-graphic reactions reuse the idle pose; defeat fades the sprite.
+      const source = state === 'hurt' || state === 'death' ? 'idle' : state;
+      this.images[state] = Array.from({length: count}, (_, i) => {
+        const path = `./assets/goblin-v35/${source}_${i}.png`;
+        if (!cache.has(path)) {
+          const image = new Image();
+          pending.push(new Promise(resolve => {
+            image.onload = () => resolve(image.naturalWidth === 260 && image.naturalHeight === 220);
+            image.onerror = () => resolve(false);
+          }));
+          image.src = path;
+          cache.set(path, image);
+        }
+        return cache.get(path);
       });
     }
+    this.ready = Promise.all(pending).then(results => {
+      this.assetsLoaded = results.every(Boolean);
+      if (!this.assetsLoaded) console.error('[FRACTURED] Goblin artwork failed to load');
+      return this.assetsLoaded;
+    });
   }
   setState(state,force=false){
     if(!ANIMS[state])state='idle';
@@ -48,7 +67,7 @@ export class GoblinEnemy {
     else if(!blocking){this.vx=player.facing*Math.min(100,hit.knockback*.25);this.setState('hurt',true);}
   }
   update(dt,player,worldWidth,paused=false){
-    if(paused)return;
+    if(paused || !this.assetsLoaded)return;
     this.attackCooldown=Math.max(0,this.attackCooldown-dt);
     this.jumpCooldown=Math.max(0,this.jumpCooldown-dt);
     this.hitFlash=Math.max(0,this.hitFlash-dt);
@@ -127,7 +146,7 @@ export class GoblinEnemy {
     }else this.y=this.groundY;
   }
   draw(ctx){
-    const imgs=this.images[this.state],img=imgs?.[Math.min(this.frame,imgs.length-1)];
+    if (!this.assetsLoaded) return;
     ctx.save();
     if(!this.dead){
       // Small health bar above the goblin's head, max 100 HP.
@@ -137,12 +156,15 @@ export class GoblinEnemy {
       ctx.fillStyle=this.hp>30?'#bd3d45':'#e77835';ctx.fillRect(this.x-w/2,barY,w*this.hp/this.maxHp,6);
       ctx.strokeStyle='rgba(255,221,184,.65)';ctx.lineWidth=.7;ctx.strokeRect(this.x-w/2,barY,w,6);
     }
-    if(img?.complete&&img.naturalWidth){
+    {
+      const frames = this.images[this.state];
+      const image = frames[Math.min(this.frame, frames.length-1)];
       const height=106,width=height*260/220;
       if(this.facing<0){ctx.translate(this.x,0);ctx.scale(-1,1);ctx.translate(-this.x,0);}
       if(this.hitFlash>0)ctx.globalAlpha=.68;
+      if(this.dead)ctx.globalAlpha=1-this.frame/(ANIMS.death[0]-1);
       // Asset frames have a common baseline at 208/220; +6px seats feet on stone.
-      ctx.drawImage(img,this.x-width/2,this.y-height+6,width,height);
+      ctx.drawImage(image,this.x-width/2,this.y-height+6,width,height);
     }
     ctx.restore();
   }
