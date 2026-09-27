@@ -1,0 +1,7 @@
+FRACTURED V4 — V36 FLAT UPLOAD REPAIR
+
+Unzip and upload EVERY file in this package beside the existing index.html in the root of Fractured-V4. Replace matching files. This package has no subfolders.
+
+The 22 unprefixed knight PNGs restore the images overwritten by the last upload. The 36 goblin PNGs all begin goblin-v36- and cannot replace knight images. The five JavaScript/HTML entry files use version 36. Keep other existing game files.
+
+After GitHub Pages deploys, reload the game. Both the knight and independently controlled goblin should appear. Automated asset and gameplay checks pass; a visual device check is still required.

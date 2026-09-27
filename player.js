@@ -1,4 +1,4 @@
-import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=35";
+import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=36";
 
 export class Player{
   constructor(x=300,y=500){

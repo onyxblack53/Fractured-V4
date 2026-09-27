@@ -18,7 +18,7 @@ export class GoblinEnemy {
     this.state='idle';this.frame=0;this.elapsed=0;this.onGround=true;
     this.dead=false;this.attackCooldown=1.2;this.decision=1.1;this.jumpCooldown=3;
     this.attackConnected=false;this.lastPlayerHitbox=null;this.hitFlash=0;
-    // Versioned NPC-only directory: never reuse player frame filenames.
+    // Unique NPC filenames survive flat uploads without overwriting player frames.
     this.images = {};
     this.assetsLoaded = false;
     const cache = new Map();
@@ -27,7 +27,7 @@ export class GoblinEnemy {
       // Non-graphic reactions reuse the idle pose; defeat fades the sprite.
       const source = state === 'hurt' || state === 'death' ? 'idle' : state;
       this.images[state] = Array.from({length: count}, (_, i) => {
-        const path = `./assets/goblin-v35/${source}_${i}.png`;
+        const path = `./goblin-v36-${source}_${i}.png`;
         if (!cache.has(path)) {
           const image = new Image();
           pending.push(new Promise(resolve => {
