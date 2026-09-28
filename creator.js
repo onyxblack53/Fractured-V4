@@ -1,4 +1,4 @@
-import {CinematicIntro} from './intro.js?v=40';
+import {CinematicIntro,ORIGIN_SCENES} from './intro.js?v=50';
 export const ORIGINS=[
   {id:'angelic-knight',name:'Angelic Knight',race:'Angel',className:'Knight',glyph:'✦',description:'A celestial guardian. Stand your ground with sword and shield.'},
   {id:'demonic-rogue',name:'Demonic Rogue',race:'Demon',className:'Rogue',glyph:'☽',description:'A swift fighter of the abyss. Close the distance with paired blades.'}
@@ -19,7 +19,11 @@ export class CharacterCreator{
       document.getElementById('origin-enter').disabled=false;
       document.getElementById('origin-summary').textContent=this.selected.name;
     };
-    document.getElementById('origin-enter').onclick=()=>{if(!this.selected)return;const o=this.selected;onComplete({origin:o.id,displayName:o.name,races:[o.race],className:o.className})};
+    document.getElementById('origin-enter').onclick=()=>{
+      if(!this.selected)return;
+      const o=this.selected;
+      this.intro.start(ORIGIN_SCENES[o.id],()=>onComplete({origin:o.id,displayName:o.name,races:[o.race],className:o.className}),o.name.toUpperCase());
+    };
   }
   show(id){document.querySelectorAll('.flow-screen').forEach(s=>s.classList.remove('active'));const screen=document.getElementById(id);screen.classList.add('active');screen.querySelector('button')?.focus()}
 }
