@@ -1,4 +1,4 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=47";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=49";
 import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
 export class Player{
@@ -30,6 +30,7 @@ export class Player{
     this.state="idle";
     this.comboStep=0;
     this.comboWindow=0;
+    this.comboGrace=0;
     this.attackQueued=false;
     this.activeHitbox=null;
 
@@ -65,15 +66,18 @@ export class Player{
     if(this.dead||this.stamina<8)return;
 
     if(this.state.startsWith("attack")){
-      if(this.comboWindow>0)this.attackQueued=true;
+      if(this.origin==='demonic-rogue'||this.comboWindow>0)this.attackQueued=true;
       return;
     }
 
-    this.stamina-=8;
-    this.comboStep=1;
+    const followup=this.origin==='demonic-rogue'&&this.comboGrace>0&&this.comboStep>0&&this.comboStep<3;
+    const step=followup?this.comboStep+1:1;
+    this.stamina-=step===3?11:8;
+    this.comboStep=step;
     this.comboWindow=.45;
+    this.comboGrace=0;
     this.attackQueued=false;
-    this.setState("attack1",true);
+    this.setState(`attack${step}`,true);
   }
 
   dodge(){
@@ -102,6 +106,10 @@ export class Player{
   update(dt){
     this.stamina=Math.min(this.maxStamina,this.stamina+17*dt);
     if(this.comboWindow>0)this.comboWindow-=dt;
+    if(this.comboGrace>0){
+      this.comboGrace=Math.max(0,this.comboGrace-dt);
+      if(this.comboGrace===0)this.comboStep=0;
+    }
 
     if(this.activeHitbox){
       this.activeHitbox.ttl-=dt;
@@ -117,19 +125,23 @@ export class Player{
         this.attackQueued=false;
         this.comboStep=2;
         this.comboWindow=.42;
+        this.comboGrace=0;
         this.stamina=Math.max(0,this.stamina-8);
         this.setState("attack2",true);
       }else if(this.state==="attack2"&&this.attackQueued){
         this.attackQueued=false;
         this.comboStep=3;
         this.comboWindow=.40;
+        this.comboGrace=0;
         this.stamina=Math.max(0,this.stamina-11);
         this.setState("attack3",true);
       }else if(this.state==="jump"){
         this.setState("fall",true);
       }else if(["attack1","attack2","attack3","dodge","heal","blockHit","hit","land"].includes(this.state)){
+        const completed=this.state;
         this.attackQueued=false;
-        this.comboStep=0;
+        if(this.origin==='demonic-rogue'&&(completed==='attack1'||completed==='attack2'))this.comboGrace=.75;
+        else{this.comboStep=0;this.comboGrace=0;}
         this.invulnerable=false;
         this.setState("idle",true);
       }
@@ -242,7 +254,10 @@ export class Player{
   }
 
   getWorldHitbox(){
-    if(!this.activeHitbox||!this.state.startsWith("attack")||this.renderer.frame!==2)return null;
+    const contactFrame=this.origin==='demonic-rogue'
+      ? (this.state==='attack3' ? [2,4].includes(this.renderer.frame) : this.renderer.frame===3)
+      : this.renderer.frame===2;
+    if(!this.activeHitbox||!this.state.startsWith("attack")||!contactFrame)return null;
     const h=this.activeHitbox;
     // Weapon bounds use the same scale as the visible sprite.
     const scale=this.renderHeight/190;

@@ -1,6 +1,8 @@
 // Demonic Rogue animation frames. These filenames are unique in a flat upload.
-const ART_VERSION='47';
-const file=pose=>`./demonic-rogue-v${pose==='attack3-rise'?'47':pose.startsWith('attack2-')||pose.startsWith('attack3-')?'46':['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
+const ART_VERSION='49';
+const file=pose=>pose==='attack3-mid'
+  ?`./demonic-rogue-v49-attack3-mid-fixed.png?v=${ART_VERSION}`
+  :`./demonic-rogue-v${pose.endsWith('-mid')?'48':pose==='attack3-rise'?'47':pose.startsWith('attack2-')||pose.startsWith('attack3-')?'46':['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
 const ANIMS={
   idle:    {poses:['idle'],fps:1,loop:true},
   walk:    {poses:['walk','walk','walk','walk'],fps:7,loop:true},
@@ -14,15 +16,16 @@ const ANIMS={
   heal:    {poses:['idle','idle','idle','idle'],fps:5,loop:false},
   hit:     {poses:['hurt','hurt','hurt','walk'],fps:10,loop:false},
   death:   {poses:['hurt','death','death','death'],fps:4,loop:false},
-  attack1: {poses:['idle','attack-windup','attack1','attack-follow','idle'],fps:12,loop:false},
-  attack2: {poses:['idle','attack2-ready','attack2-low','attack2-low','idle'],fps:13,loop:false},
-  attack3: {poses:['idle','attack3-ready','attack3-down','attack3-rise','attack-follow','idle'],fps:12,loop:false}
+  attack1: {poses:['idle','attack-windup','attack1-mid','attack1','attack-follow','idle'],fps:13,loop:false},
+  attack2: {poses:['idle','attack2-ready','attack2-mid','attack2-low','attack2-low','idle'],fps:14,loop:false},
+  attack3: {poses:['idle','attack3-ready','attack3-down','attack3-mid','attack3-rise','attack-follow','idle'],fps:14,loop:false}
 };
 const HITS={
   attack1:{x:18,y:-95,w:72,h:55,damage:20,knockback:220},
   attack2:{x:12,y:-82,w:82,h:48,damage:25,knockback:260},
   attack3:{x:8,y:-95,w:63,h:82,damage:36,knockback:330}
 };
+const RISING_HIT={x:18,y:-132,w:68,h:82,damage:18,knockback:180};
 export class DemonicRogueRenderer{
   constructor(){
     this.state='idle';this.frame=0;this.time=0;this.images={};
@@ -48,7 +51,8 @@ export class DemonicRogueRenderer{
         if(cfg.loop)this.frame=0;
         else{this.frame=cfg.poses.length-1;this.time=0;return 'finished'}
       }
-      if(this.frame===2&&HITS[this.state])eventHandler?.('hit',{hitbox:HITS[this.state]});
+      if(this.frame===(this.state==='attack3'?2:3)&&HITS[this.state])eventHandler?.('hit',{hitbox:HITS[this.state]});
+      if(this.state==='attack3'&&this.frame===4)eventHandler?.('hit',{hitbox:RISING_HIT});
       if(this.state==='dodge'&&this.frame===1)eventHandler?.('iframeOn',{});
       if(this.state==='dodge'&&this.frame===3)eventHandler?.('iframeOff',{});
       if(this.state==='heal'&&this.frame===2)eventHandler?.('heal',{});
