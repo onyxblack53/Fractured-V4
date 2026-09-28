@@ -130,7 +130,16 @@ export class GoblinEnemy {
         if(this.onGround)this.setState(this.vx?'walk':'idle');
       }
     }else this.vx*=Math.max(0,1-9*dt);
+    const previousX=this.x;
+    if(this.onGround&&Math.abs(this.vx)>1&&this.jumpCooldown<=0&&this.obstacles?.some(o=>
+      this.vx>0?o.x-this.x>0&&o.x-this.x<48:this.x-(o.x+o.w)>0&&this.x-(o.x+o.w)<48)){
+      this.onGround=false;this.vy=-400;this.jumpCooldown=1.8;this.setState('jump',true);
+    }
     this.x=clamp(this.x+this.vx*dt,50,Math.max(50,worldWidth-50));
+    for(const o of this.obstacles||[]){
+      if(this.y<=this.groundY-o.h+3||this.x+16<=o.x||this.x-16>=o.x+o.w)continue;
+      this.x=previousX<o.x?o.x-16:o.x+o.w+16;this.vx=0;
+    }
     // Body collision is resolved in WORLD coordinates, after both actors
     // update. The player remains controlled only by Player/bindControls.
     // Move the NPC out of the player's visual body, never the knight sprite.

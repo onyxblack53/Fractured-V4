@@ -7,6 +7,7 @@ export class Player{
     this.x=x;
     this.y=y;
     this.groundY=y;
+    this.obstacles=[];
 
     this.vx=0;
     this.vy=0;
@@ -208,7 +209,18 @@ export class Player{
       }
     }
 
+    const previousX=this.x;
     this.x+=this.vx*dt;
+    const radius=this.renderHeight*.14;
+    for(const obstacle of this.obstacles){
+      // Once the feet rise above the pile, horizontal movement passes over it.
+      if(this.y<=this.groundY-obstacle.h+3)continue;
+      if(this.x+radius<=obstacle.x||this.x-radius>=obstacle.x+obstacle.w)continue;
+      const left=obstacle.x-radius,right=obstacle.x+obstacle.w+radius;
+      this.x=previousX<=left?left:previousX>=right?right:
+        Math.abs(previousX-left)<Math.abs(previousX-right)?left:right;
+      this.vx=0;
+    }
 
     const margin=45;
     const maxX=Math.max(margin,(this.worldWidth || window.innerWidth)-margin);
