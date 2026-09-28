@@ -1,4 +1,4 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=39";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=43";
 import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
 export class Player{

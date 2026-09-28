@@ -1,0 +1,9 @@
+FRACTURED v43 — Demonic Rogue motion PNGs
+
+Upload the 15 game files in this ZIP into your repository root: index.html, main.js, player.js, menus.js, demonicRogueRenderer.js, and the ten demonic-rogue-v43-*.png files. Replace the five matching code files. Keep all existing Knight, Goblin and Aradavia PNGs. Commit the files, wait for GitHub Pages deployment, and reload.
+
+This package applies directly over the current v40 repository. It includes the v42 exclusive player spawn guard and does not need the older v41 Rogue PNG ZIP or separate v42 patch. Only the chosen playable character spawns; the Goblin remains an enemy.
+
+New transparent Rogue art covers idle, walk, run, three attacks, block, jump, hurt, and death. All ten names start with demonic-rogue-v43-, so they cannot overwrite Knight or Goblin PNGs. The game transitions among the PNG keyframes at the action's timing; this is a keyframe animation rather than fully drawn in-between frames.
+
+Seven tests pass, including exclusive spawn, separate filenames, asset loading, and dagger contact timing. On-device visual review remains needed. ROGUE_MOTION_PROMPTS.json records the image-generation prompts; it is included for reference and does not need uploading.

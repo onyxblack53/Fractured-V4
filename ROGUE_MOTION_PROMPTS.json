@@ -1,0 +1,61 @@
+[
+  {
+    "key": "idle",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-dbe4c474-e0a7-4528-9e1d-72ce0782448e.png",
+    "prompt": "Edit the referenced transparent sprite into a neutral IDLE keyframe, preserving the exact same horned hooded Demonic Rogue, ornate dark leather and metal armor, burgundy torn scarf, red eyes, and exactly TWO matching short curved red-black daggers one in each hand. Standing upright at rest with both boots grounded and body centered, both daggers held down separately at either side. Full-body square PNG with truly transparent background, facing right three-quarter side view, same scale and consistent foot baseline. Painterly game sprite, no ground, no extra blades, no text.",
+    "filename": "demonic-rogue-v43-idle.png"
+  },
+  {
+    "key": "walk",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-1baeda9b-36c0-4b56-9407-4c1e0e7627c7.png",
+    "filename": "demonic-rogue-v43-walk.png"
+  },
+  {
+    "key": "run",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-6679ddcf-f60e-4e51-b605-fc4d4543388c.png",
+    "prompt": "Edit the provided transparent Demonic Rogue sprite into a DIFFERENT full-body animation keyframe. Preserve the EXACT same horned hooded red-eyed character, armor, burgundy scarf, two identical short curved red-black daggers one in each hand, anatomy, visual style, right-facing orientation and square transparent canvas. Keep ground baseline close to the source. One character only, no scenery, no background, no text. Pose: full-speed sprint toward right with long stretched stride, cape streaming left, arms pumping with BOTH DAGGERS held visibly in separate hands; athletic and forward leaning",
+    "filename": "demonic-rogue-v43-run.png"
+  },
+  {
+    "key": "block",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-4b2ef2f2-e381-4a4e-b919-262c640b31ed.png",
+    "prompt": "Edit the provided transparent Demonic Rogue sprite into a DIFFERENT full-body animation keyframe. Preserve the EXACT same horned hooded red-eyed character, armor, burgundy scarf, two identical short curved red-black daggers one in each hand, anatomy, visual style, right-facing orientation and square transparent canvas. Keep ground baseline close to the source. One character only, no scenery, no background, no text. Pose: defensive crouch facing right, knees bent, BOTH SHORT DAGGERS crossed tightly in an X in front of chest and face to intercept a strike; no shield",
+    "filename": "demonic-rogue-v43-block.png"
+  },
+  {
+    "key": "jump",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-2a9e3ee8-a7e3-402c-840f-3822f70fb454.png",
+    "prompt": "Edit the provided transparent Demonic Rogue sprite into a DIFFERENT full-body animation keyframe. Preserve the EXACT same horned hooded red-eyed character, armor, burgundy scarf, two identical short curved red-black daggers one in each hand, anatomy, visual style, right-facing orientation and square transparent canvas. Keep ground baseline close to the source. One character only, no scenery, no background, no text. Pose: airborne leap toward right, BOTH boots clearly off ground and knees bent, torso turned slightly, one short dagger forward and one held behind, cloak floating upward",
+    "filename": "demonic-rogue-v43-jump.png"
+  },
+  {
+    "key": "attack1",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-b7706bc6-3bfe-436e-94d3-fa897b88b9ab.png",
+    "prompt": "Edit the reference into ONE new animation pose of the EXACT same horned hooded Demonic Rogue, dark ornate armor, red eye and shredded burgundy scarf. Two matching short curved red-black DAGGERS, exactly one in EACH hand, both readable. Full-body square transparent PNG, facing right, anatomy coherent, feet close to common ground baseline, same painterly detail. No background, no ground, no words. Pose: quick low lunge toward the right, right arm extended forward with short curved dagger slashing horizontally at waist level, left hand holds second short dagger low for follow-up, front knee deeply bent; slash trail subtle",
+    "filename": "demonic-rogue-v43-attack1.png"
+  },
+  {
+    "key": "attack2",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-36c5e38a-59b4-4b8c-8977-b0c5c967ed0a.png",
+    "prompt": "Edit the reference into ONE new animation pose of the EXACT same horned hooded Demonic Rogue, dark ornate armor, red eye and shredded burgundy scarf. Two matching short curved red-black DAGGERS, exactly one in EACH hand, both readable. Full-body square transparent PNG, facing right, anatomy coherent, feet close to common ground baseline, same painterly detail. No background, no ground, no words. Pose: cross slash, both arms forward with the two distinct short daggers crossing into an X in front of torso toward right; aggressive stepping forward; separate hands, short red motion arcs",
+    "filename": "demonic-rogue-v43-attack2.png"
+  },
+  {
+    "key": "attack3",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-818f7b45-6ef8-483a-9430-2a98bcaf8d87.png",
+    "prompt": "Edit the reference into ONE new animation pose of the EXACT same horned hooded Demonic Rogue, dark ornate armor, red eye and shredded burgundy scarf. Two matching short curved red-black DAGGERS, exactly one in EACH hand, both readable. Full-body square transparent PNG, facing right, anatomy coherent, feet close to common ground baseline, same painterly detail. No background, no ground, no words. Pose: high overhead downward double-dagger finishing strike, both separate daggers raised above hood then plunging toward right, crouched rear leg, controlled red arc, all figure visible",
+    "filename": "demonic-rogue-v43-attack3.png"
+  },
+  {
+    "key": "hurt",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-e1ede851-5f66-4a53-962b-e7a474d3dd0b.png",
+    "prompt": "Edit this transparent game sprite into a NEW animation frame. EXACT same horned hooded demonic Rogue with red eyes, ornate dark armor and shredded burgundy scarf, two matching short red-black crescent daggers in separate hands. Full-body, square transparent canvas, right-facing, consistent scale and baseline, no background, no text, no extra blades, no gore. The rogue RECOILS from a hit from the right, shoulders thrown back and head ducking left, knees buckling, both daggers still firmly gripped with visibly separate hands. Torn sash sways forward. Hurt reaction, no blood.",
+    "filename": "demonic-rogue-v43-hurt.png"
+  },
+  {
+    "key": "death",
+    "path": "/workspace/scratch/8b5486f97797/generated_images/exec-0f442e35-6031-4a99-b3cb-b1daa2a8e7e4.png",
+    "prompt": "Edit this transparent game sprite into a NEW animation frame. EXACT same horned hooded demonic Rogue with red eyes, ornate dark armor and shredded burgundy scarf, two matching short red-black crescent daggers in separate hands. Full-body, square transparent canvas, right-facing, consistent scale and baseline, no background, no text, no extra blades, no gore. Defeated rogue COLLAPSED ON THE GROUND on his side, facing right, whole body horizontal close to the BOTTOM of the square canvas; hood, horns, armor and both red daggers still visible, one in each relaxed hand. Eyes dimmed, no blood, no dismemberment, clear death/fallen silhouette.",
+    "filename": "demonic-rogue-v43-death.png"
+  }
+]

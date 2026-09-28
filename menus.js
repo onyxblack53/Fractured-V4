@@ -1,4 +1,4 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=39";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=43";
 const EQUIPMENT=[["HEAD","Celestial Helm"],["CHEST","Seraph Plate"],["ARMS","Vambraces"],["LEGS","Greaves"],["MAIN","Divine Sword"],["OFF","Aegis Shield"]];
 const INVENTORY=["Celestial Helm","Seraph Plate","Vambraces","Greaves","Divine Sword","Aegis Shield","Radiant Flask","Fracture Shard"];
 export function initMenus(getBuild){
@@ -16,7 +16,20 @@ document.getElementById('invGrid').innerHTML=[...equipment.map(e=>e[1]),'Restori
 document.getElementById("bloodlineText").textContent=`${build.races.join(" / ")} · ${build.className}`;document.getElementById("bloodlineTier").textContent=build.displayName||"Angelic Knight"}startPreview()}
   function open(page){refresh();menu.classList.add("open");menu.setAttribute("aria-hidden","false");document.querySelectorAll(".menuPage").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".menuTab").forEach(x=>x.classList.remove("active"));if(page==="inventory"){invPage.classList.add("active");document.querySelector('[data-page="inventory"]').classList.add("active")}else{charPage.classList.add("active");document.querySelector('[data-page="character"]').classList.add("active")}}
   const close=()=>{menu.classList.remove("open");menu.setAttribute("aria-hidden","true")};document.getElementById("menu-character").onclick=()=>open("character");document.getElementById("menu-inventory").onclick=()=>open("inventory");document.getElementById("menu-close").onclick=close;document.querySelectorAll(".menuTab[data-page]").forEach(b=>b.onclick=()=>open(b.dataset.page));
-  const roguePreview=new DemonicRogueRenderer();
-  let previewStarted=false;function startPreview(){if(previewStarted)return;previewStarted=true;let frame=0;preview.src="./idle_0.png?v=2";setInterval(()=>{frame=(frame+1)%4;if(getBuild()?.origin==='demonic-rogue'){const c=document.createElement('canvas');c.width=240;c.height=240;roguePreview.draw(c.getContext('2d'),120,215,1,210);preview.src=c.toDataURL()}else preview.src=`./idle_${frame}.png?v=36`},200)}
+  let roguePreview=null,previewStarted=false,frame=0;
+  function renderPreview(){
+    if(getBuild()?.origin==='demonic-rogue'){
+      roguePreview??=new DemonicRogueRenderer();
+      const c=document.createElement('canvas');c.width=240;c.height=240;
+      roguePreview.draw(c.getContext('2d'),120,215,1,210,false);
+      if(roguePreview.images.idle.complete&&roguePreview.images.idle.naturalWidth)preview.src=c.toDataURL();
+    }else{frame=(frame+1)%4;preview.src=`./idle_${frame}.png?v=36`}
+  }
+  function startPreview(){
+    if(getBuild()?.origin==='demonic-rogue')preview.removeAttribute('src');
+    renderPreview();
+    if(previewStarted)return;
+    previewStarted=true;setInterval(renderPreview,200);
+  }
 }
 function slotHTML([slot,item]){return `<div class="equipSlot"><b>${slot}</b><small>${item}</small></div>`}
