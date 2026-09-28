@@ -1,8 +1,9 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=43";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=44";
 import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
 export class Player{
   constructor(x=300,y=500,build={}){
+    this.origin=build.origin||'angelic-knight';
     this.x=x;
     this.y=y;
     this.groundY=y;
@@ -43,7 +44,7 @@ export class Player{
     };
 
     this.renderer=build.origin==="demonic-rogue"?new DemonicRogueRenderer():new AngelKnightSpriteRenderer();
-    if(build.origin==="demonic-rogue"){this.speed=210;this.runSpeed=275;}
+    if(this.origin==="demonic-rogue"){this.speed=195;this.runSpeed=255;}
   }
 
   setState(next,force=false){
@@ -153,12 +154,17 @@ export class Player{
     if(!locked&&!this.isBlocking){
       if(Math.abs(mx)>.08){
         this.facing=Math.sign(mx);
-        const topSpeed=Math.abs(mx)>.78?this.runSpeed:this.speed;
+        // A thumb near the run threshold moves slightly on every frame.
+        // Give only the Rogue a wider gap before switching poses.
+        const running=this.origin==='demonic-rogue'
+          ? Math.abs(mx)>(this.state==='run'?.70:.86)
+          : Math.abs(mx)>.78;
+        const topSpeed=running?this.runSpeed:this.speed;
         const desired=mx*topSpeed;
         this.vx+=(desired-this.vx)*Math.min(1,14*dt);
 
         if(this.onGround){
-          this.setState(Math.abs(mx)>.78?"run":"walk");
+          this.setState(running?"run":"walk");
         }
       }else{
         this.vx+=(0-this.vx)*Math.min(1,18*dt);
@@ -197,7 +203,11 @@ export class Player{
     this.x=Math.max(margin,Math.min(maxX,this.x));
   }
 
-  get renderHeight(){return Math.max(145,Math.min(210,window.innerHeight*.17));}
+  get renderHeight(){
+    const height=Math.max(145,Math.min(210,window.innerHeight*.17));
+    // Knight PNGs have about 20% transparent padding; Rogue PNGs fill the frame.
+    return this.origin==='demonic-rogue'?height*.80:height;
+  }
 
   get hurtbox(){
     const h=this.renderHeight;

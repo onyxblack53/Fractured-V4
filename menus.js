@@ -1,4 +1,4 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=43";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=44";
 const EQUIPMENT=[["HEAD","Celestial Helm"],["CHEST","Seraph Plate"],["ARMS","Vambraces"],["LEGS","Greaves"],["MAIN","Divine Sword"],["OFF","Aegis Shield"]];
 const INVENTORY=["Celestial Helm","Seraph Plate","Vambraces","Greaves","Divine Sword","Aegis Shield","Radiant Flask","Fracture Shard"];
 export function initMenus(getBuild){

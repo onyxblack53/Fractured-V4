@@ -3,9 +3,9 @@ const ART_VERSION='43';
 const file=pose=>`./demonic-rogue-v43-${pose}.png?v=${ART_VERSION}`;
 const ANIMS={
   idle:    {poses:['idle'],fps:1,loop:true},
-  walk:    {poses:['idle','walk','walk','idle'],fps:7,loop:true},
-  run:     {poses:['walk','run','run','walk'],fps:10,loop:true},
-  jump:    {poses:['walk','jump','jump','jump'],fps:8,loop:false},
+  walk:    {poses:['walk','walk','walk','walk'],fps:7,loop:true},
+  run:     {poses:['run','run','run','run'],fps:10,loop:true},
+  jump:    {poses:['jump','jump','jump','jump'],fps:8,loop:false},
   fall:    {poses:['jump','jump','jump','jump'],fps:7,loop:true},
   land:    {poses:['walk'],fps:8,loop:false},
   block:   {poses:['block','block','block','block'],fps:7,loop:true},
@@ -66,7 +66,13 @@ export class DemonicRogueRenderer{
     if(facing<0){ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0)}
     if(this.state==='death')ctx.globalAlpha=Math.max(.15,1-this.frame/4);
     else if(this.state==='dodge')ctx.globalAlpha=.8;
-    ctx.drawImage(image,x-width/2,y-height,width,height);
+    // Smooth subpixel stride motion without swapping to a differently framed
+    // illustration on each step. Keep the foot baseline fixed on the bridge.
+    const moving=this.state==='walk'||this.state==='run';
+    const phase=moving?(this.frame+this.time*cfg.fps)*Math.PI/2:0;
+    const sway=moving?Math.sin(phase)*height*.006:0;
+    const lift=moving?Math.abs(Math.sin(phase))*height*.004:0;
+    ctx.drawImage(image,x-width/2+sway,y-height-lift,width,height);
     ctx.restore();
   }
 }

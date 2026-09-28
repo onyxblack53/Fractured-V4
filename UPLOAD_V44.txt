@@ -1,0 +1,9 @@
+FRACTURED v44 — Rogue scale and smoother movement
+
+Upload the five code files in this ZIP to your repository root, replacing matching files: index.html, main.js, player.js, menus.js, demonicRogueRenderer.js. Commit, wait for GitHub Pages, then reload the game.
+
+This code-only update uses the existing ten demonic-rogue-v43 PNGs already uploaded. No image files are replaced. The Rogue is drawn at 80% of the previous square-frame size so his visible body is closer to the Angelic Knight's. His collision boxes and dagger hit zones use that same scale.
+
+Walk/run use stable images with a subtle stride sway, and Rogue input uses separate enter/exit thresholds to avoid flickering between walk and run when a thumb rests near the joystick threshold. Rogue movement speeds are 195/255 instead of 210/275. Knight movement and size are unchanged.
+
+Three automated scale/motion checks passed. Please check on your phone for final visual sizing and feel.
