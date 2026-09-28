@@ -1,7 +1,8 @@
+import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=39";
 import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
 export class Player{
-  constructor(x=300,y=500){
+  constructor(x=300,y=500,build={}){
     this.x=x;
     this.y=y;
     this.groundY=y;
@@ -41,7 +42,8 @@ export class Player{
       heal:false
     };
 
-    this.renderer=new AngelKnightSpriteRenderer();
+    this.renderer=build.origin==="demonic-rogue"?new DemonicRogueRenderer():new AngelKnightSpriteRenderer();
+    if(build.origin==="demonic-rogue"){this.speed=210;this.runSpeed=275;}
   }
 
   setState(next,force=false){

@@ -1,0 +1,13 @@
+FRACTURED v39 — Aradavia prologue and two characters
+
+Upload all 11 game files in this ZIP into the repository root, replacing matching names. Keep the existing images and other game files. New required files include intro.js and demonicRogueRenderer.js. Commit, wait for GitHub Pages to deploy, then reload.
+
+BEGIN YOUR STORY opens 10 animated still scenes (about 75 seconds), telling the confirmed Aradavia story through the Fracture. The ending immediately opens character selection: Angelic Knight or Demonic Rogue. Each scene has Continue; the whole prologue supports Skip, Pause and Replay. Reduced-motion mode uses manual Continue.
+
+The cinematics currently use existing landscape artwork as temporary backdrops, with camera motion, fades, embers and story captions. This is not a rendered video; bespoke story illustrations and narration are not included.
+
+Angelic Knight keeps the existing sprite artwork. Demonic Rogue has an original, simple canvas-drawn prototype with horns, paired blades and faster movement; it is not yet a detailed sprite set. Both use the current combat framework. Ability effects remain placeholders.
+
+Includes the v37 melee fix and v38 layout/cooldowns. No PNG replacement is needed.
+
+17 automated checks pass, including story completion/skip/replay and both character choices. On-device visual verification remains needed.

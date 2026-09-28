@@ -5,27 +5,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#050408">
   <title>FRACTURED: The Darkness</title>
-  <link rel="stylesheet" href="./styles.css?v=38">
+  <link rel="stylesheet" href="./styles.css?v=39">
   <link rel="stylesheet" href="./bridge-overlay-v23.css?v=23">
 </head>
 <body>
 <div id="app">
   <section id="start-screen" class="flow-screen active center-screen">
     <div class="sigil">✦</div><h1 class="logo">FRACTURED</h1><div class="sublogo">THE DARKNESS</div>
-    <p>Worlds fracture. Blood remembers.</p><button id="start-btn" class="primary-btn">START</button>
+    <p>Worlds fracture. Blood remembers.</p><button id="start-btn" class="primary-btn">BEGIN YOUR STORY</button>
   </section>
-  <section id="race-screen" class="flow-screen"><div class="flow-panel">
-    <div class="sigil">✦</div><h2>CHOOSE YOUR BLOODLINE</h2>
-    <p>Choose one full-blooded race or combine two races as a half-blood.</p>
-    <div class="mode-switch"><button id="pure-btn" class="selected">FULL BLOODED</button><button id="hybrid-btn">HALF BLOODED</button></div>
-    <div id="race-summary" class="selection-summary">Select one race.</div><div id="race-grid" class="choice-grid"></div>
-    <div class="flow-footer"><button id="flow-back-start">BACK</button><button id="race-next" class="primary-btn" disabled>CONTINUE</button></div>
-  </div></section>
-  <section id="class-screen" class="flow-screen"><div class="flow-panel">
-    <div class="sigil">✦</div><h2>CHOOSE YOUR CLASS</h2>
-    <p>Your blood determines what you are. Your class determines how you fight.</p>
-    <div id="bloodline-summary" class="selection-summary"></div><div id="class-grid" class="choice-grid"></div>
-    <div class="flow-footer"><button id="flow-back-race">BACK</button><button id="enter-world" class="primary-btn" disabled>ENTER WORLD</button></div>
+  <section id="intro-screen" class="flow-screen" aria-label="Story opening">
+    <div class="intro-shade"></div><div class="intro-embers" aria-hidden="true"></div>
+    <div class="intro-top"><span>FRACTURED / THE DARKNESS</span><button id="intro-skip">SKIP INTRO</button></div>
+    <div class="intro-copy" aria-live="polite"><small id="intro-chapter"></small><h2 id="intro-title"></h2><p id="intro-story"></p></div>
+    <div class="intro-bottom"><button id="intro-pause">PAUSE</button><button id="intro-next">CONTINUE</button></div><div class="intro-track"><div id="intro-progress"></div></div>
+  </section>
+  <section id="race-screen" class="flow-screen"><div class="flow-panel origin-panel">
+    <div class="sigil">✦</div><p class="eyebrow">TWO PATHS. ONE FRACTURED WORLD.</p><h2>CHOOSE YOUR CHARACTER</h2>
+    <p>The world has fractured. Your story begins.</p><div id="origin-grid"></div>
+    <p id="origin-summary">Choose your character.</p><button id="replay-intro" class="text-button">REPLAY PROLOGUE</button>
+    <div class="flow-footer"><button id="flow-back-start">BACK</button><button id="origin-enter" class="primary-btn" disabled>ENTER WORLD</button></div>
   </div></section>
   <section id="loading-screen" class="flow-screen center-screen">
     <div class="sigil loading-sigil">✦</div><h2 class="loading-title">ENTERING THE SHATTERED KINGDOM</h2>
@@ -55,10 +54,10 @@
     </section><div id="toast"></div>
   </main>
   <div id="rpgMenu" aria-hidden="true"><nav class="menuTop"><button class="menuTab active" data-page="character">CHARACTER</button><button class="menuTab" data-page="inventory">INVENTORY</button><button id="menu-close" class="menuClose">×</button></nav>
-    <main id="characterPage" class="menuPage active"><div class="charLayout"><div id="leftEquip" class="equipCol"></div><div class="charCenter"><img id="character-preview" alt="Angel Knight preview"><h2 id="bloodlineText">ANGEL · KNIGHT</h2><div id="bloodlineTier" class="bloodline">FULL BLOODED</div></div><div id="rightEquip" class="equipCol"></div></div><div class="levelRow">LEVEL 1<div class="xpbar"><i></i></div></div><div id="statColumns" class="statColumns"></div></main>
+    <main id="characterPage" class="menuPage active"><div class="charLayout"><div id="leftEquip" class="equipCol"></div><div class="charCenter"><img id="character-preview" alt="Angel Knight preview"><h2 id="bloodlineText">ANGEL · KNIGHT</h2><div id="bloodlineTier" class="bloodline">ANGELIC KNIGHT</div></div><div id="rightEquip" class="equipCol"></div></div><div class="levelRow">LEVEL 1<div class="xpbar"><i></i></div></div><div id="statColumns" class="statColumns"></div></main>
     <main id="inventoryPage" class="menuPage"><div class="inventoryBody"><div id="invGrid" class="invGrid"></div><aside id="itemDetail" class="itemDetail"></aside></div><div class="menuFooter">Equip · Compare · Sort · Back</div></main>
   </div>
 </div>
-<script type="module" src="./main.js?v=38"></script>
+<script type="module" src="./main.js?v=39"></script>
   <script type="module" src="./bridge-world-v23.js?v=23"></script>
 </body></html>
