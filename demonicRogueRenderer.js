@@ -1,6 +1,6 @@
 // Demonic Rogue animation frames. These filenames are unique in a flat upload.
-const ART_VERSION='45';
-const file=pose=>`./demonic-rogue-v${['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
+const ART_VERSION='46';
+const file=pose=>`./demonic-rogue-v${pose.startsWith('attack2-')||pose.startsWith('attack3-')?'46':['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
 const ANIMS={
   idle:    {poses:['idle'],fps:1,loop:true},
   walk:    {poses:['walk','walk','walk','walk'],fps:7,loop:true},
@@ -15,13 +15,13 @@ const ANIMS={
   hit:     {poses:['hurt','hurt','hurt','walk'],fps:10,loop:false},
   death:   {poses:['hurt','death','death','death'],fps:4,loop:false},
   attack1: {poses:['idle','attack-windup','attack1','attack-follow','idle'],fps:12,loop:false},
-  attack2: {poses:['attack-windup','attack2','attack2','attack-follow','idle'],fps:13,loop:false},
-  attack3: {poses:['attack-windup','attack3','attack3','attack-follow','idle'],fps:12,loop:false}
+  attack2: {poses:['idle','attack2-ready','attack2-low','attack2-low','idle'],fps:13,loop:false},
+  attack3: {poses:['idle','attack3-ready','attack3-down','attack3-down','idle'],fps:12,loop:false}
 };
 const HITS={
   attack1:{x:18,y:-95,w:72,h:55,damage:20,knockback:220},
-  attack2:{x:12,y:-100,w:78,h:60,damage:25,knockback:260},
-  attack3:{x:10,y:-150,w:70,h:135,damage:36,knockback:330}
+  attack2:{x:12,y:-82,w:82,h:48,damage:25,knockback:260},
+  attack3:{x:8,y:-95,w:63,h:82,damage:36,knockback:330}
 };
 export class DemonicRogueRenderer{
   constructor(){
