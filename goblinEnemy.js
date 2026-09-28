@@ -8,8 +8,8 @@ const ANIMS = {
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 // The two characters have separate bodies and sprite renderers. Their image
 // rectangles are wider than their collision boxes, so prevent visual fusion.
-const BODY_SPACING=138;
-const ATTACK_RANGE=158;
+const BODY_SPACING=60;
+const ATTACK_RANGE=68;
 const overlap=(a,b)=>a.x < b.x+b.w && a.x+a.w>b.x && a.y<b.y+b.h && a.y+a.h>b.y;
 export class GoblinEnemy {
   constructor(x,groundY){
@@ -52,7 +52,10 @@ export class GoblinEnemy {
     this.state=state;this.frame=0;this.elapsed=0;
     if(state==='attack1'||state==='attack2')this.attackConnected=false;
   }
-  get hurtbox(){return {x:this.x-29,y:this.y-77,w:58,h:75};}
+  get hurtbox(){return {x:this.x-18,y:this.y-77,w:36,h:75};}
+  get weaponHitbox(){
+    return {x:this.facing>0?this.x+12:this.x-52,y:this.y-76,w:40,h:46};
+  }
   takeHit(player){
     // Each player hitbox object is generated once per swing by Player.handleAnimationEvent.
     const source=player.activeHitbox;
@@ -86,14 +89,13 @@ export class GoblinEnemy {
           break;
         }
       }
-      if(this.state.startsWith('attack')&&this.frame===2&&!this.attackConnected){
-        this.attackConnected=true;
-        const reach=ATTACK_RANGE;
-        const dx=player.x-this.x;
-        if(!player.dead&&Math.abs(dx)<reach && Math.abs(player.y-this.y)<76 && dx*this.facing>0){
-          player.damage(this.state==='attack2'?14:10,this.x);
-        }
-      }
+    }
+    // Test throughout the contact frame, allowing a moving target to enter
+    // the swing, but never damage during wind-up, recovery, or across a gap.
+    if(this.state.startsWith('attack')&&this.frame===2&&!this.attackConnected
+        &&!player.dead&&overlap(this.weaponHitbox,player.hurtbox)){
+      this.attackConnected=true;
+      player.damage(this.state==='attack2'?14:10,this.x);
     }
     if(this.dead)return;
     const dx=player.x-this.x, dist=Math.abs(dx);

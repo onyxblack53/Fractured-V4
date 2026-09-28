@@ -73,11 +73,11 @@ export class AngelKnightSpriteRenderer {
         }
       }
       if (this.state==='attack1' && this.frame===2)
-        eventHandler?.('hit',{hitbox:{x:34,y:-92,w:118,h:76,damage:20,knockback:220}});
+        eventHandler?.('hit',{hitbox:{x:18,y:-95,w:72,h:55,damage:20,knockback:220}});
       if (this.state==='attack2' && this.frame===2)
-        eventHandler?.('hit',{hitbox:{x:28,y:-105,w:135,h:86,damage:25,knockback:260}});
+        eventHandler?.('hit',{hitbox:{x:12,y:-100,w:78,h:60,damage:25,knockback:260}});
       if (this.state==='attack3' && this.frame===2)
-        eventHandler?.('hit',{hitbox:{x:24,y:-118,w:155,h:100,damage:36,knockback:330}});
+        eventHandler?.('hit',{hitbox:{x:10,y:-150,w:70,h:135,damage:36,knockback:330}});
       if (this.state==='dodge' && this.frame===1) eventHandler?.('iframeOn',{});
       if (this.state==='dodge' && this.frame===3) eventHandler?.('iframeOff',{});
       if (this.state==='heal' && this.frame===2) eventHandler?.('heal',{});

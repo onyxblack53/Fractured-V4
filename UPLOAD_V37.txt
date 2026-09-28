@@ -1,0 +1,11 @@
+FRACTURED V4 — weapon contact update v37
+
+Upload the five code files from this ZIP into the repository root, replacing files with the same names. Commit the upload, allow GitHub Pages to finish deploying, then reload the game.
+
+Files: index.html, main.js, player.js, goblinEnemy.js, angelKnightSpriteRenderer.js.
+
+This update shortens melee hit zones, scales the knight hit zones to the visible sprite, brings the goblin closer, and checks weapon/body overlap only on the striking frame. Each swing can damage once.
+
+No PNG files are included or need replacing. Keep all existing artwork.
+
+Validation: 12 automated combat/asset tests pass. On-device visual verification is still needed.

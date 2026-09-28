@@ -1,4 +1,4 @@
-import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=36";
+import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
 export class Player{
   constructor(x=300,y=500){
@@ -46,6 +46,7 @@ export class Player{
 
   setState(next,force=false){
     if(this.state===next&&!force)return;
+    this.activeHitbox=null;
     this.state=next;
     this.renderer.setState(next,force);
   }
@@ -194,9 +195,15 @@ export class Player{
     this.x=Math.max(margin,Math.min(maxX,this.x));
   }
 
+  get renderHeight(){return Math.max(145,Math.min(210,window.innerHeight*.17));}
+
+  get hurtbox(){
+    const h=this.renderHeight;
+    return {x:this.x-h*.14,y:this.y-h*.62,w:h*.28,h:h*.60};
+  }
+
   draw(ctx){
-    const h=Math.max(145,Math.min(210,window.innerHeight*.17));
-    this.renderer.draw(ctx,this.x,this.y,this.facing,h,this.onGround);
+    this.renderer.draw(ctx,this.x,this.y,this.facing,this.renderHeight,this.onGround);
   }
 
   damage(amount,fromX=this.x){
@@ -223,14 +230,16 @@ export class Player{
   }
 
   getWorldHitbox(){
-    if(!this.activeHitbox)return null;
+    if(!this.activeHitbox||!this.state.startsWith("attack")||this.renderer.frame!==2)return null;
     const h=this.activeHitbox;
+    // Weapon bounds use the same scale as the visible sprite.
+    const scale=this.renderHeight/190;
 
     return{
-      x:this.facing>0?this.x+h.x:this.x-h.x-h.w,
-      y:this.y+h.y,
-      w:h.w,
-      h:h.h,
+      x:this.facing>0?this.x+h.x*scale:this.x-(h.x+h.w)*scale,
+      y:this.y+h.y*scale,
+      w:h.w*scale,
+      h:h.h*scale,
       damage:h.damage,
       knockback:h.knockback
     };
