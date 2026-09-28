@@ -1,9 +1,9 @@
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=40";
-import {Player} from "./player.js?v=39";
+import {Player} from "./player.js?v=41";
 import {GoblinEnemy} from "./goblinEnemy.js?v=37";
 import {bindControls} from "./controls.js?v=11";
-import {initMenus} from "./menus.js?v=39";
+import {initMenus} from "./menus.js?v=41";
 import {WorldExtension} from "./worldExtension.js?v=20";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
@@ -23,12 +23,18 @@ function bridgeSurfaceY(){
 }
 function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();if(player){player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();if(player.onGround)player.y=player.groundY;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(goblin){goblin.groundY=bridgeSurfaceY();if(goblin.onGround)goblin.y=goblin.groundY;}}
 addEventListener("resize",resize,{passive:true});resize();
-function enterWorld(config){buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY(),config);player.worldWidth=world.worldWidth;goblin=new GoblinEnemy(Math.min(world.worldWidth-70,player.x+Math.min(225,innerWidth*.50)),bridgeSurfaceY());world.setCamera(0);window.FRACTURED.angelKnight=player;
+function enterWorld(config){if(window.FRACTURED.started)return;buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;window.FRACTURED.loading=false;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY(),config);player.worldWidth=world.worldWidth;goblin=new GoblinEnemy(Math.min(world.worldWidth-70,player.x+Math.min(225,innerWidth*.50)),bridgeSurfaceY());world.setCamera(0);
+// Exactly one playable actor exists. Keep legacy names exclusive to the chosen origin.
+window.FRACTURED.player=player;
+window.FRACTURED.angelKnight=config.origin==='angelic-knight'?player:null;
+window.FRACTURED.demonicRogue=config.origin==='demonic-rogue'?player:null;
 window.FRACTURED.goblin=goblin;
 goblin.ready.then(loaded=>{if(!loaded){const toast=document.getElementById("toast");toast.textContent="Enemy artwork could not load. Reload to retry.";toast.classList.add("show");}});
 if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=config.displayName;resize();last=performance.now()}
-function beginGame(config){buildConfig=config;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));const loading=document.getElementById("loading-screen");loading.classList.add("active");loadingBuild.textContent=config.displayName;loadingFill.style.width="0%";const steps=[14,36,58,80,100];let i=0;const tick=()=>{loadingFill.style.width=steps[i]+"%";i++;if(i<steps.length)setTimeout(tick,140);else setTimeout(()=>enterWorld(config),220)};setTimeout(tick,80)}
-window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,menuPaused:false};
+function beginGame(config){if(window.FRACTURED.loading||window.FRACTURED.started)return;
+if(!['angelic-knight','demonic-rogue'].includes(config?.origin))throw new Error('Choose Angelic Knight or Demonic Rogue before entering the world');
+window.FRACTURED.loading=true;buildConfig=config;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));const loading=document.getElementById("loading-screen");loading.classList.add("active");loadingBuild.textContent=config.displayName;loadingFill.style.width="0%";const steps=[14,36,58,80,100];let i=0;const tick=()=>{loadingFill.style.width=steps[i]+"%";i++;if(i<steps.length)setTimeout(tick,140);else setTimeout(()=>enterWorld(config),220)};setTimeout(tick,80)}
+window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,loading:false,player:null,angelKnight:null,demonicRogue:null,menuPaused:false};
 new CharacterCreator(beginGame);initMenus(()=>buildConfig);
 const abilityCooldowns=new AbilityCooldowns([4,6,8]);
 const abilityLabels=["Radiant Burst","Aegis of Heaven","Falling Star"];

@@ -1,0 +1,9 @@
+FRACTURED v42 — exclusive playable character selection
+
+Upload this ZIP's two files (main.js and index.html) to the repository root after uploading v41. Replace the matching files. v41 supplies the four demonic-rogue-v41 PNGs and its PNG renderer; this small follow-up expects those files. Commit the upload and reload after Pages deploys.
+
+Each choice creates exactly one playable Player. Angelic Knight chooses the Knight renderer; Demonic Rogue chooses the four uniquely named Rogue PNGs and dual-dagger renderer. The Goblin remains an enemy NPC in both cases. Repeated taps on Enter do not create extra player or enemy instances. window.FRACTURED.player points to the active character, while angelKnight and demonicRogue aliases point only to the matching origin.
+
+The Rogue PNG filenames are demonic-rogue-v41-idle.png, demonic-rogue-v41-run.png, demonic-rogue-v41-lunge.png, and demonic-rogue-v41-cross.png. None matches any existing Knight or Goblin PNG filename.
+
+Two spawn tests pass. The current public repository contains v40 and has not yet received the v41 Rogue PNGs. Upload v41 before this patch.
