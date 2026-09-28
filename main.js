@@ -1,3 +1,4 @@
+import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=11";
 import {Player} from "./player.js?v=37";
 import {GoblinEnemy} from "./goblinEnemy.js?v=37";
@@ -29,5 +30,25 @@ if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textConten
 function beginGame(config){buildConfig=config;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));const loading=document.getElementById("loading-screen");loading.classList.add("active");loadingBuild.textContent=`${config.races.join(" / ")} · ${config.className}`;loadingFill.style.width="0%";const steps=[14,36,58,80,100];let i=0;const tick=()=>{loadingFill.style.width=steps[i]+"%";i++;if(i<steps.length)setTimeout(tick,140);else setTimeout(()=>enterWorld(config),220)};setTimeout(tick,80)}
 window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,menuPaused:false};
 new CharacterCreator(beginGame);initMenus(()=>buildConfig);
-["ability1-btn","ability2-btn","ability3-btn"].forEach((id,i)=>document.getElementById(id).onclick=()=>{const toast=document.getElementById("toast"),labels=["Radiant Burst","Aegis of Heaven","Falling Star"];toast.textContent=labels[i]+" — ability ready";toast.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>toast.classList.remove("show"),850)});
-function frame(now){const dt=Math.min(.033,(now-last)/1000||.016);last=now;ctx.clearRect(0,0,innerWidth,innerHeight);if(player){const paused=document.getElementById("rpgMenu").classList.contains("open");if(!paused)player.update(dt);if(goblin)goblin.update(dt,player,world.worldWidth,paused);world.follow(player);world.render(now);ctx.save();ctx.translate(-world.cameraX,0);if(goblin)goblin.draw(ctx);player.draw(ctx);ctx.restore();hpFill.style.width=`${player.hp/player.maxHp*100}%`;staminaFill.style.width=`${player.stamina/player.maxStamina*100}%`;stateLabel.textContent=player.state.toUpperCase()}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+const abilityCooldowns=new AbilityCooldowns([4,6,8]);
+const abilityLabels=["Radiant Burst","Aegis of Heaven","Falling Star"];
+const abilityButtons=abilityLabels.map((label,i)=>document.getElementById(`ability${i+1}-btn`));
+function renderAbilities(){
+  abilityButtons.forEach((button,i)=>{
+    const remaining=abilityCooldowns.remaining[i];
+    button.disabled=!player||player.dead||remaining>0;
+    button.querySelector('.cooldown').textContent=remaining>0?`${Math.ceil(remaining)}s`:'';
+    button.style.setProperty('--cooldown-fill',`${remaining/abilityCooldowns.durations[i]*100}%`);
+    button.setAttribute('aria-label',`${abilityLabels[i]}${remaining>0?`, ${Math.ceil(remaining)} seconds remaining`:`, ready`}`);
+  });
+}
+abilityButtons.forEach((button,i)=>button.onclick=()=>{
+  if(!player||player.dead||document.getElementById('rpgMenu').classList.contains('open')||!abilityCooldowns.use(i))return;
+  renderAbilities();
+  const toast=document.getElementById('toast');
+  toast.textContent=abilityLabels[i]+" — combat effect coming soon";
+  toast.classList.add('show');clearTimeout(window.__toast);
+  window.__toast=setTimeout(()=>toast.classList.remove('show'),1200);
+});
+renderAbilities();
+function frame(now){const dt=Math.min(.033,(now-last)/1000||.016);last=now;ctx.clearRect(0,0,innerWidth,innerHeight);if(player){const paused=document.getElementById("rpgMenu").classList.contains("open");if(!paused){player.update(dt);abilityCooldowns.update(dt)}renderAbilities();if(goblin)goblin.update(dt,player,world.worldWidth,paused);world.follow(player);world.render(now);ctx.save();ctx.translate(-world.cameraX,0);if(goblin)goblin.draw(ctx);player.draw(ctx);ctx.restore();hpFill.style.width=`${player.hp/player.maxHp*100}%`;staminaFill.style.width=`${player.stamina/player.maxStamina*100}%`;stateLabel.textContent=player.state.toUpperCase()}requestAnimationFrame(frame)}requestAnimationFrame(frame);

@@ -1,0 +1,9 @@
+FRACTURED v38 — mobile controls and ability cooldowns
+
+Upload all seven game files in this ZIP to your repository root, replacing matching names. abilityCooldowns.js is a new required file. Commit and wait for GitHub Pages deployment, then reload.
+
+Layout follows the marked reference: joystick left; three rectangular ability slots; block above jump; attack above heal; dodge beside joystick. Independent cooldowns: I 4 seconds, II 6 seconds, III 8 seconds. Countdown overlays prevent repeated use and pause with the game menu.
+
+Ability combat effects remain placeholders in this build.
+Includes the v37 melee contact fix. No PNG replacements.
+14 automated tests passed; layout still needs a phone visual check.

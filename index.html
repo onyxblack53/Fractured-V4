@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#050408">
   <title>FRACTURED: The Darkness</title>
-  <link rel="stylesheet" href="./styles.css?v=2">
+  <link rel="stylesheet" href="./styles.css?v=38">
   <link rel="stylesheet" href="./bridge-overlay-v23.css?v=23">
 </head>
 <body>
@@ -39,8 +39,19 @@
     <div id="quest"><strong>THE SHATTERED KINGDOM</strong><span>Reach the abandoned cathedral beneath the Blood Moon.</span></div>
     <div id="quick-menu"><button id="menu-character">CHARACTER</button><button id="menu-inventory">INVENTORY</button></div>
     <section id="controls" aria-label="mobile controls">
-      <div id="move-pad" class="pad"><div id="move-knob"></div></div><button id="jump-btn" class="round jump">JUMP</button>
-      <div id="combat-cluster"><button id="ability1-btn" class="small ability a1">I</button><button id="ability2-btn" class="small ability a2">II</button><button id="ability3-btn" class="small ability a3">III</button><button id="attack-btn" class="small attack">ATK</button><button id="block-btn" class="small block">BLK</button><button id="heal-btn" class="small heal">HEAL</button><button id="dodge-btn" class="round dodge">DODGE</button></div>
+      <div id="move-pad" class="pad"><div id="move-knob"></div></div>
+      <div id="ability-slots" role="group" aria-label="Abilities">
+        <button id="ability1-btn" class="ability" aria-label="Radiant Burst"><span>I</span><small class="cooldown"></small></button>
+        <button id="ability2-btn" class="ability" aria-label="Aegis of Heaven"><span>II</span><small class="cooldown"></small></button>
+        <button id="ability3-btn" class="ability" aria-label="Falling Star"><span>III</span><small class="cooldown"></small></button>
+      </div>
+      <div id="combat-cluster">
+        <button id="block-btn" class="small block">BLK</button>
+        <button id="attack-btn" class="small attack">ATK</button>
+        <button id="dodge-btn" class="small dodge">DODGE</button>
+        <button id="jump-btn" class="round jump">JUMP</button>
+        <button id="heal-btn" class="small heal">HEAL</button>
+      </div>
     </section><div id="toast"></div>
   </main>
   <div id="rpgMenu" aria-hidden="true"><nav class="menuTop"><button class="menuTab active" data-page="character">CHARACTER</button><button class="menuTab" data-page="inventory">INVENTORY</button><button id="menu-close" class="menuClose">×</button></nav>
@@ -48,6 +59,6 @@
     <main id="inventoryPage" class="menuPage"><div class="inventoryBody"><div id="invGrid" class="invGrid"></div><aside id="itemDetail" class="itemDetail"></aside></div><div class="menuFooter">Equip · Compare · Sort · Back</div></main>
   </div>
 </div>
-<script type="module" src="./main.js?v=37"></script>
+<script type="module" src="./main.js?v=38"></script>
   <script type="module" src="./bridge-world-v23.js?v=23"></script>
 </body></html>
