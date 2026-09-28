@@ -1,6 +1,6 @@
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=40";
-import {Player} from "./player.js?v=44";
+import {Player} from "./player.js?v=45";
 import {GoblinEnemy} from "./goblinEnemy.js?v=37";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=44";

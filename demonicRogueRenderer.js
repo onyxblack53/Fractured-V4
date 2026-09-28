@@ -1,10 +1,10 @@
 // Demonic Rogue animation frames. These filenames are unique in a flat upload.
-const ART_VERSION='43';
-const file=pose=>`./demonic-rogue-v43-${pose}.png?v=${ART_VERSION}`;
+const ART_VERSION='45';
+const file=pose=>`./demonic-rogue-v${['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
 const ANIMS={
   idle:    {poses:['idle'],fps:1,loop:true},
   walk:    {poses:['walk','walk','walk','walk'],fps:7,loop:true},
-  run:     {poses:['run','run','run','run'],fps:10,loop:true},
+  run:     {poses:['run','run-stride-a','run','run-stride-b'],fps:11,loop:true},
   jump:    {poses:['jump','jump','jump','jump'],fps:8,loop:false},
   fall:    {poses:['jump','jump','jump','jump'],fps:7,loop:true},
   land:    {poses:['walk'],fps:8,loop:false},
@@ -14,9 +14,9 @@ const ANIMS={
   heal:    {poses:['idle','idle','idle','idle'],fps:5,loop:false},
   hit:     {poses:['hurt','hurt','hurt','walk'],fps:10,loop:false},
   death:   {poses:['hurt','death','death','death'],fps:4,loop:false},
-  attack1: {poses:['idle','walk','attack1','walk'],fps:11,loop:false},
-  attack2: {poses:['walk','block','attack2','walk'],fps:12,loop:false},
-  attack3: {poses:['walk','jump','attack3','block'],fps:12,loop:false}
+  attack1: {poses:['idle','attack-windup','attack1','attack-follow','idle'],fps:12,loop:false},
+  attack2: {poses:['attack-windup','attack2','attack2','attack-follow','idle'],fps:13,loop:false},
+  attack3: {poses:['attack-windup','attack3','attack3','attack-follow','idle'],fps:12,loop:false}
 };
 const HITS={
   attack1:{x:18,y:-95,w:72,h:55,damage:20,knockback:220},
@@ -68,7 +68,7 @@ export class DemonicRogueRenderer{
     else if(this.state==='dodge')ctx.globalAlpha=.8;
     // Smooth subpixel stride motion without swapping to a differently framed
     // illustration on each step. Keep the foot baseline fixed on the bridge.
-    const moving=this.state==='walk'||this.state==='run';
+    const moving=this.state==='walk';
     const phase=moving?(this.frame+this.time*cfg.fps)*Math.PI/2:0;
     const sway=moving?Math.sin(phase)*height*.006:0;
     const lift=moving?Math.abs(Math.sin(phase))*height*.004:0;
