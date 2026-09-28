@@ -1,0 +1,66 @@
+{
+  "generator": "Built-in image_gen",
+  "scenes": [
+    {
+      "scene": 1,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-b22f026f-2a69-426a-aced-ee5155375d3f.png",
+      "prompt": "Use case: illustration-story. Create ONE cinematic game opening still, portrait 2:3, no text or borders. Aradavia at its golden age: a prosperous monumental nation combining advanced arcane magic and sophisticated technology, luminous ivory stone towers, brass mechanical astronomical structures, blue arcane conduits powering elegant floating transit above bustling terraces. Epic realistic dark-fantasy concept painting with fine detail, warm sunrise, hopeful and majestic rather than ruined. Strong cinematic depth, central skyline in upper two thirds, lower quarter darker and uncluttered for later captions. This is the first image in a consistent fantasy story series. No modern cars or skyscrapers, no words, no watermark.",
+      "file": "aradavia-intro-v40-01.png"
+    },
+    {
+      "scene": 2,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-9db5ff8e-55f5-40fa-8276-938adae8747d.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. Exactly thirteen scholarly arcane governors in a grand circular chamber, arranged as twelve robed seated figures along a semicircle and a thirteenth standing centrally in foreground. Luminous astronomical machinery above a circular council table, warm gold window light and cool blue magic. Distinguished scholar central foreground is a slender middle-aged man with shoulder-length dark hair streaked silver, clean-shaven angular face, high-collared navy robes with brass trim and a round blue chest clasp. Prosperity, dignity and wisdom; no evil yet.",
+      "correction": "Edit this council image to contain EXACTLY THIRTEEN PEOPLE TOTAL, not fourteen. Preserve the central standing dark-haired scholar unchanged. There must be exactly SIX seated people to his left and SIX seated people to his right, each with one clearly separate visible head, total twelve seated plus one standing. Remove the extra seated figure and reconstruct that space as architecture/chair. No extra distant people, human statues, faces or portraits. Preserve the composition, robes, brass astronomical machine, lighting, visual style and portrait aspect ratio. Count visible heads carefully. No text.",
+      "file": "aradavia-intro-v40-02.png"
+    },
+    {
+      "scene": 3,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-90dd7fe1-5794-4ced-864f-65273b06c075.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. Deep beneath the earth, in an ancient immense cavern, a fist-sized faceted obsidian black gemstone embedded in fractured rock at the center, absorbing nearby light, faint violet veins and whispering smoke. Three tiny robed scholar explorers with blue magic lanterns approach below, showing scale. Terrifying discovery, no demons yet, strong focus on the single black gem.",
+      "file": "aradavia-intro-v40-03.png"
+    },
+    {
+      "scene": 4,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-a55a2df6-cc92-46fc-a9a7-af1097eed04f.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. Twelve scholars form a distant semicircle with raised hands around an obsidian gem on a brass-and-stone pedestal, swearing to seal it. The thirteenth scholar in sharp three-quarter profile foreground watches with secret fascination: slender middle-aged man, shoulder-length dark hair streaked silver, clean-shaven angular face, high-collared navy robes brass trim round blue chest clasp. The gem's faint violet reflection in his eye; everyone else lit blue. Gothic arcane chamber, psychological tension, no violence.",
+      "file": "aradavia-intro-v40-04.png"
+    },
+    {
+      "scene": 5,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-5ad4af4b-0c26-4cac-b149-9ab1584f4723.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. In a cathedral-like arcane laboratory, twelve robed scholars around a ritual circle channel blue magic toward a single black obsidian gem vanishing into an immense circular black void suspended above brass machinery. The same slender middle-aged scholar with shoulder-length black hair streaked silver, clean-shaven angular face, high-collared navy robe with brass trim and round blue chest clasp. He stands to one side secretly drawing a thin violet-black tendril from the gemstone toward his chest. Sweeping wide view, visual contrast of blue sealing magic and dark tether. No readable runes.",
+      "file": "aradavia-intro-v40-05.png"
+    },
+    {
+      "scene": 6,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-817d75b5-2e60-4a75-8480-f88d0f5eaa35.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. The same slender middle-aged scholar with shoulder-length black hair streaked silver, clean-shaven angular face, high-collared navy robe with brass trim and round blue chest clasp. Intimate portrait in the now-dark ritual chamber: a ribbon of violet-black smoke enters his chest clasp and coils around his arm, faint violet veins below his eyes. Behind him the void has closed, pedestal empty, NO gemstone visible. He looks awed and afraid, still human. Strong rim light, psychological dark fantasy, not gore.",
+      "file": "aradavia-intro-v40-06.png"
+    },
+    {
+      "scene": 7,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-17d327db-e2ed-4f03-ba86-7cf8d20d61eb.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. The same slender middle-aged scholar with shoulder-length black hair streaked silver, clean-shaven angular face, high-collared navy robe with brass trim and round blue chest clasp. Now visibly corrupted, wild-eyed, he stands in the shattered council hall draining luminous blue and gold arcane energy from three fallen robed scholars into his outstretched hands. The fallen scholars appear lifeless but intact, no blood, no wounds, no gore. Dark violet smoke coils behind him; brass astronomical machinery broken overhead. Tragic cinematic tableau.",
+      "file": "aradavia-intro-v40-07.png"
+    },
+    {
+      "scene": 8,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-8e6ce9a7-4eb8-4e05-ae37-a69ce89b4613.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. The corrupted scholar, a slender middle-aged man with shoulder-length dark hair streaked silver, angular clean-shaven face and high-collared navy robes with brass trim, kneels before a vision conjured by black-violet smoke. A gigantic ancient ritual diagram of fractured concentric circles floats above the stone floor, showing a dark forgotten curse revealed by the darkness. Abstract geometric arcane symbols, NOT readable writing. His blue chest clasp now violet. Gothic chamber mostly in shadow, violet luminous smoke, no other people, ominous restrained horror.",
+      "file": "aradavia-intro-v40-08.png"
+    },
+    {
+      "scene": 9,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-00bc1864-6259-4199-b8db-73363b0f2f31.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. Epic wide-view catastrophe over Aradavia: a prosperous ivory gothic city with brass arcane machinery and blue power conduits. The earth splits into abyssal fissures and the sky cracks like glass into enormous jagged glowing violet seams. Through the sky fissures, impossible fragments of OTHER WORLDS spill out: inverted mountains, distant fiery realms, floating broken landscapes. A small dark-robed scholar on a central ritual platform raises both arms. Apocalyptic scale, supernatural fractured reality, dramatic red-violet sky, no close-up victims or gore.",
+      "file": "aradavia-intro-v40-09.png"
+    },
+    {
+      "scene": 10,
+      "path": "/workspace/scratch/8b5486f97797/generated_images/exec-fce6fa1b-0694-4e2f-af7a-ff6c3e16d7ac.png",
+      "prompt": "Use case: illustration-story. ONE portrait 2:3 cinematic realistic fantasy game illustration, painterly fine detail, Aradavia world of ivory gothic stone, brass arcane technology and blue magical conduits. No text, labels, borders or watermark. Subject clearly framed in upper two thirds; lower quarter dark and calm for captions. Nightmarish creatures of hell emerge through a giant jagged violet-red fracture in the sky and earth above shattered Aradavia. A towering horned infernal silhouette with ember eyes and charred rock-like skin steps through, flanked by several clawed crawling shadow beasts and winged creatures. Ruined ivory towers, broken brass arcane machinery and flickering blue conduits establish the same once-prosperous city. Cinematic terrifying dark fantasy, smoke, ash and embers, creatures occupy middle and upper frame, lower quarter shadow for captions, no gore, no foreground human hero.",
+      "file": "aradavia-intro-v40-10.png"
+    }
+  ]
+}

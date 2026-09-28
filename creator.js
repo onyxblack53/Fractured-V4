@@ -1,4 +1,4 @@
-import {CinematicIntro} from './intro.js?v=39';
+import {CinematicIntro} from './intro.js?v=40';
 export const ORIGINS=[
   {id:'angelic-knight',name:'Angelic Knight',race:'Angel',className:'Knight',glyph:'✦',description:'A celestial guardian. Stand your ground with sword and shield.'},
   {id:'demonic-rogue',name:'Demonic Rogue',race:'Demon',className:'Rogue',glyph:'☽',description:'A swift fighter of the abyss. Close the distance with paired blades.'}

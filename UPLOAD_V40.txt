@@ -1,0 +1,13 @@
+FRACTURED v40 — illustrated animated Aradavia opening
+
+Upload all 21 game files from this ZIP into the repository root: 11 code files and 10 new aradavia-intro-v40 PNGs. Replace matching code files. The new image names do not match any character or goblin image names. Keep existing game artwork.
+
+Commit, allow GitHub Pages to deploy, then reload. BEGIN YOUR STORY runs the 10-scene opening and leads directly to Angelic Knight / Demonic Rogue selection. Continue, Skip, Pause and Replay remain available.
+
+Each scene now has its own generated illustration. Animation is rendered by the game: slow camera movement, crossfades, drifting particles, mist and colored arcane glow. This is an animated-still cinematic, not character-motion video. No audio narration is included. Reduced-motion users advance manually with Continue.
+
+Council correction: exactly 13 visible people, six seated on each side plus one standing. That image is displayed in full on narrow screens.
+
+17 automated checks pass. Visual motion still needs on-device review. Includes previous melee, controls, cooldowns and character-selection updates. Demonic Rogue remains a simple prototype renderer; ability effects remain placeholders.
+
+INTRO_ART_PROMPTS.json records the built-in image_gen prompts for each illustration. ARADAVIA_STORY.md records the confirmed lore. These and this instruction file do not need uploading.

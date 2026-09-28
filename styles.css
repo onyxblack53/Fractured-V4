@@ -68,3 +68,28 @@ button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;user-s
 #origin-summary{color:#e6cea0}.text-button{font-size:9px;padding:9px 12px}
 @media(max-width:360px){#origin-grid{gap:8px}.origin-name{font-size:18px}.origin-card{padding:20px 10px}}
 @media(prefers-reduced-motion:reduce){.intro-shot,.intro-embers{animation:none}.intro-shot.leaving{display:none}}
+
+/* v40: bespoke story paintings with separate animated atmosphere layers. */
+#intro-screen{--scene-glow:191,136,56}
+#intro-screen[data-effect="blue"]{--scene-glow:52,137,235}
+#intro-screen[data-effect="void"]{--scene-glow:130,51,210}
+#intro-screen[data-effect="fracture"]{--scene-glow:204,65,180}
+#intro-screen[data-effect="fire"]{--scene-glow:230,64,22}
+.intro-shot{inset:0;background-position:center;background-size:cover;animation-name:storyPush;animation-timing-function:linear;animation-fill-mode:both;will-change:transform}
+.intro-shot[data-motion="pull"]{animation-name:storyPull}
+.intro-shot.leaving{animation:introFade 1.1s forwards!important}
+.intro-aura{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 55% 32%,rgba(var(--scene-glow),.22),transparent 58%);mix-blend-mode:screen;animation:storyGlow 5s ease-in-out infinite alternate}
+.intro-mist{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.22;background:radial-gradient(ellipse at 30% 65%,rgba(var(--scene-glow),.3),transparent 45%),radial-gradient(ellipse at 80% 45%,#a2aec533,transparent 50%);animation:storyMist 13s ease-in-out infinite alternate}
+.intro-embers{background-image:radial-gradient(2px 2px at 15% 40%,rgba(var(--scene-glow),.95),transparent),radial-gradient(2px 2px at 70% 80%,rgba(var(--scene-glow),.8),transparent),radial-gradient(1px 1px at 45% 60%,#fff4c2,transparent)}
+.intro-copy{bottom:16%;left:7%;right:7%}.intro-copy h2{font-size:clamp(27px,7vw,60px);margin:12px 0}.intro-copy p{font-size:clamp(15px,4vw,22px);line-height:1.45}
+.paused .intro-aura,.paused .intro-mist{animation-play-state:paused}
+@keyframes storyPush{from{transform:scale(1)}to{transform:scale(1.075) translateY(-.7%)}}
+@keyframes storyPull{from{transform:scale(1.075)}to{transform:scale(1)}}
+@keyframes storyGlow{from{opacity:.35}to{opacity:.85}}
+@keyframes storyMist{from{transform:translateX(-3%) scale(1.05)}to{transform:translateX(3%) scale(1.12)}}
+@media(orientation:landscape){.intro-shot{background-size:contain!important;background-repeat:no-repeat;background-color:#030205}.intro-copy{left:5%;right:auto;width:36%;bottom:18%}.intro-copy h2{font-size:30px}.intro-copy p{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.intro-shot,.intro-aura,.intro-mist,.intro-embers{animation:none!important}}
+
+/* Keep all thirteen council members visible on narrow phones. */
+.intro-shot[data-full-frame="true"]{background-size:contain;background-repeat:no-repeat;background-color:#030205;animation-name:storyCouncil}
+@keyframes storyCouncil{from{transform:translateY(.5%)}to{transform:translateY(-.5%)}}

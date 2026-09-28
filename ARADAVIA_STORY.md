@@ -26,4 +26,4 @@
 ## Transition into gameplay
 Immediately after the Fracture and the creatures of hell are unleashed, the cinematic ends and the player chooses Angelic Knight or Demonic Rogue. No additional story scene precedes this choice.
 
-The opening currently ends with the Fracture and the unleashing of creatures of hell. Existing landscape images are temporary cinematic backdrops, not literal depictions of the council, gem, or golden age.
+The opening currently ends with the Fracture and the unleashing of creatures of hell. v40 supplies ten bespoke illustrated story scenes, with animated camera motion, drifting atmosphere and arcane glow. The corrected council painting contains six seated figures on each side and the central standing scholar.
