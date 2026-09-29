@@ -1,7 +1,7 @@
 // Foreground props share the player's world coordinates and bridge baseline.
 const load=name=>{
   const image=new Image();
-  image.src=name==='rubble'?'./world-ruin-v53-rubble.png?v=53':'./world-ruin-v51-arch.png?v=53';
+  image.src=name==='rubble'?'./world-ruin-v53-rubble.png?v=54':'./world-ruin-v51-arch.png?v=54';
   image.onerror=()=>console.error(`[FRACTURED] Missing ruin art: ${name}`);
   return image;
 };
@@ -23,10 +23,12 @@ export class Ruins{
     props.push({kind:'rubble',x:first+span*.34,w:rubbleWidth,h:rubbleHeight,groundY,solid:true});
     props.push({kind:'arch',x:first+span*.78,w:archHeight*.96,h:archHeight,groundY,solid:false});
     this.props=props.sort((a,b)=>a.x-b.x);
-    // Two landable terraces within a single image. The second needs another jump.
+    // Three landable rises match the visible stones: loose rocks, middle ledge,
+    // then the top slab. Keep their heights below the player's jump reach.
     this.solids=props.filter(p=>p.solid).flatMap(p=>[
+      {x:p.x+p.w*.08,w:p.w*.26,h:p.h*.17},
       {x:p.x+p.w*.34,w:p.w*.36,h:p.h*.48},
-      {x:p.x+p.w*.70,w:p.w*.29,h:p.h*.94}
+      {x:p.x+p.w*.70,w:p.w*.29,h:p.h*.79}
     ]);
   }
   draw(ctx,cameraX,viewportWidth){
