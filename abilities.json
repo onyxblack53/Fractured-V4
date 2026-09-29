@@ -1,6 +1,7 @@
 {
   "game": "Fractured",
   "ownerClass": "angel_knight",
+  "classRestriction": "Only angel_knight can list, equip, or cast these abilities. Never add them to demonic_rogue.",
   "defaultEquippedSlots": [
     "celestial_light",
     "halo_bolt",
@@ -8,61 +9,184 @@
   ],
   "abilities": {
     "celestial_light": {
-      "name": "Celestial Light",
+      "displayName": "Celestial Light",
       "slot": 1,
-      "stunSeconds": 3.5,
-      "radiusFeet": 10,
-      "description": "Blinding area flash; stuns nearby enemies.",
-      "spriteSheet": "celestial_light/celestial_light_sprite_sheet.png",
+      "description": "Blinding area flash; stuns nearby enemies within 10 ft for 3.5 seconds.",
+      "ownerClass": "angel_knight",
+      "originalSpriteSheet": "celestial_light/celestial_light_original_sprite_sheet.png",
+      "preciseCutoutStrip": "celestial_light/celestial_light_precise_cutout_strip.png",
       "frames": [
-        "celestial_light/celestial_light_frame_01.png",
-        "celestial_light/celestial_light_frame_02.png",
-        "celestial_light/celestial_light_frame_03.png",
-        "celestial_light/celestial_light_frame_04.png"
+        "celestial_light/frames_precise_cutout/celestial_light_frame_01.png",
+        "celestial_light/frames_precise_cutout/celestial_light_frame_02.png",
+        "celestial_light/frames_precise_cutout/celestial_light_frame_03.png",
+        "celestial_light/frames_precise_cutout/celestial_light_frame_04.png"
       ],
-      "frameSize": [
-        543,
-        724
+      "frameSizes": [
+        [
+          485,
+          593
+        ],
+        [
+          575,
+          621
+        ],
+        [
+          671,
+          697
+        ],
+        [
+          489,
+          617
+        ]
       ],
-      "ownerClass": "angel_knight"
+      "sourceSliceBoxesFromOriginalSheet": [
+        [
+          0,
+          0,
+          473,
+          724
+        ],
+        [
+          473,
+          0,
+          1036,
+          724
+        ],
+        [
+          1036,
+          0,
+          1695,
+          724
+        ],
+        [
+          1695,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "preciseCutout": true,
+      "frameCount": 4
     },
     "halo_bolt": {
-      "name": "Halo Bolt",
+      "displayName": "Halo Bolt",
       "slot": 2,
-      "damageType": "electric",
-      "description": "Yellow-white holy lightning projectile.",
-      "spriteSheet": "halo_bolt/halo_bolt_sprite_sheet.png",
+      "description": "Yellow-white holy lightning projectile that deals electric damage.",
+      "ownerClass": "angel_knight",
+      "originalSpriteSheet": "halo_bolt/halo_bolt_original_sprite_sheet.png",
+      "preciseCutoutStrip": "halo_bolt/halo_bolt_precise_cutout_strip.png",
       "frames": [
-        "halo_bolt/halo_bolt_frame_01.png",
-        "halo_bolt/halo_bolt_frame_02.png",
-        "halo_bolt/halo_bolt_frame_03.png",
-        "halo_bolt/halo_bolt_frame_04.png"
+        "halo_bolt/frames_precise_cutout/halo_bolt_frame_01.png",
+        "halo_bolt/frames_precise_cutout/halo_bolt_frame_02.png",
+        "halo_bolt/frames_precise_cutout/halo_bolt_frame_03.png",
+        "halo_bolt/frames_precise_cutout/halo_bolt_frame_04.png"
       ],
-      "frameSize": [
-        543,
-        724
+      "frameSizes": [
+        [
+          483,
+          573
+        ],
+        [
+          506,
+          503
+        ],
+        [
+          765,
+          602
+        ],
+        [
+          454,
+          446
+        ]
       ],
-      "ownerClass": "angel_knight"
+      "sourceSliceBoxesFromOriginalSheet": [
+        [
+          0,
+          0,
+          483,
+          724
+        ],
+        [
+          483,
+          0,
+          977,
+          724
+        ],
+        [
+          977,
+          0,
+          1730,
+          724
+        ],
+        [
+          1730,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "preciseCutout": true,
+      "frameCount": 4
     },
     "wing_burst": {
-      "name": "Wing Burst",
+      "displayName": "Wing Burst",
       "slot": 3,
-      "damage": true,
-      "knockback": true,
-      "description": "Wing-powered damaging gust with knockback.",
-      "spriteSheet": "wing_burst/wing_burst_sprite_sheet.png",
+      "description": "Wing-powered damaging gust that knocks enemies back.",
+      "ownerClass": "angel_knight",
+      "originalSpriteSheet": "wing_burst/wing_burst_original_sprite_sheet.png",
+      "preciseCutoutStrip": "wing_burst/wing_burst_precise_cutout_strip.png",
       "frames": [
-        "wing_burst/wing_burst_frame_01.png",
-        "wing_burst/wing_burst_frame_02.png",
-        "wing_burst/wing_burst_frame_03.png",
-        "wing_burst/wing_burst_frame_04.png"
+        "wing_burst/frames_precise_cutout/wing_burst_frame_01.png",
+        "wing_burst/frames_precise_cutout/wing_burst_frame_02.png",
+        "wing_burst/frames_precise_cutout/wing_burst_frame_03.png",
+        "wing_burst/frames_precise_cutout/wing_burst_frame_04.png"
       ],
-      "frameSize": [
-        543,
-        724
+      "frameSizes": [
+        [
+          460,
+          408
+        ],
+        [
+          566,
+          595
+        ],
+        [
+          703,
+          654
+        ],
+        [
+          489,
+          447
+        ]
       ],
-      "ownerClass": "angel_knight"
+      "sourceSliceBoxesFromOriginalSheet": [
+        [
+          0,
+          0,
+          450,
+          724
+        ],
+        [
+          450,
+          0,
+          1004,
+          724
+        ],
+        [
+          1004,
+          0,
+          1695,
+          724
+        ],
+        [
+          1695,
+          0,
+          2172,
+          724
+        ]
+      ],
+      "preciseCutout": true,
+      "frameCount": 4
     }
-  },
-  "classRestriction": "Only angel_knight can list, equip, or cast these abilities. Never add them to demonic_rogue."
+  }
 }

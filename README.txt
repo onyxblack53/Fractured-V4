@@ -1,11 +1,21 @@
-FRACTURED — ANGEL KNIGHT ABILITY ASSETS
+FRACTURED — ANGEL KNIGHT ABILITY PACK (PRECISE CUTOUT EDITION)
 
-Three transparent four-frame sprite sheets, plus four individual PNG frames per ability.
-Use abilities.json for ownership, slots, and gameplay metadata.
-These are asset/config files, not an automatic patch for the game.
-In the game's inventory and cast checks, require ownerClass === 'angel_knight'.
-Do not register these abilities for demonic_rogue.
+This ZIP contains cleaned individual PNG frames for the Angel Knight's 3 abilities:
+1. Celestial Light
+2. Halo Bolt
+3. Wing Burst
 
-Animations are four-frame concept sprites. Equal-width individual crops are provided
-for convenience; for effects extending across a frame boundary, use/rework the full
-sheet and separate the effect into a VFX layer if needed.
+What changed:
+- Each frame has been isolated more tightly.
+- Transparent borders were added so the artwork does not touch the file edges.
+- The goal is to avoid leftover slivers/cut marks from neighboring frames.
+
+Important gameplay restriction:
+- These abilities belong only to ownerClass = 'angel_knight'.
+- Do not register them for 'demonic_rogue'.
+
+Included per ability:
+- Original generated sprite sheet
+- Precise-cutout individual frame PNGs
+- A rebuilt preview strip made from the cleaned frames
+- Metadata in abilities.json
