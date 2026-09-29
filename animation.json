@@ -1,0 +1,62 @@
+{
+  "canvas": [
+    512,
+    512
+  ],
+  "pivot": [
+    256,
+    480
+  ],
+  "facing": "left",
+  "animations": {
+    "walk": {
+      "frames": [
+        "svar-jester-v65-walk_00.png",
+        "svar-jester-v65-walk_01.png",
+        "svar-jester-v65-walk_02.png",
+        "svar-jester-v65-walk_03.png",
+        "svar-jester-v65-walk_04.png",
+        "svar-jester-v65-walk_05.png"
+      ],
+      "frame_ms": 100,
+      "loop": true
+    },
+    "run": {
+      "frames": [
+        "svar-jester-v65-run_00.png",
+        "svar-jester-v65-run_01.png",
+        "svar-jester-v65-run_02.png",
+        "svar-jester-v65-run_03.png",
+        "svar-jester-v65-run_04.png",
+        "svar-jester-v65-run_05.png"
+      ],
+      "frame_ms": 75,
+      "loop": true
+    },
+    "jump": {
+      "frames": [
+        "svar-jester-v65-jump_00.png",
+        "svar-jester-v65-jump_01.png",
+        "svar-jester-v65-jump_02.png",
+        "svar-jester-v65-jump_03.png",
+        "svar-jester-v65-jump_04.png",
+        "svar-jester-v65-jump_05.png"
+      ],
+      "frame_ms": 95,
+      "loop": false
+    },
+    "cower": {
+      "frames": [
+        "svar-jester-v65-cower_00.png",
+        "svar-jester-v65-cower_01.png",
+        "svar-jester-v65-cower_02.png",
+        "svar-jester-v65-cower_03.png",
+        "svar-jester-v65-cower_04.png",
+        "svar-jester-v65-cower_05.png"
+      ],
+      "frame_ms": 95,
+      "loop": false,
+      "hold_frame": 5
+    }
+  }
+}
