@@ -2,8 +2,8 @@ import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=50";
 import {Player} from "./player.js?v=54";
 import {Ruins} from "./ruins.js?v=59";
-import {SvarNpc} from "./svarNpc.js?v=67";
-import {SvarConversation} from "./svarConversation.js?v=66";
+import {SvarNpc} from "./svarNpc.js?v=70";
+import {SvarConversation} from "./svarConversation.js?v=70";
 import {CathedralGate} from "./cathedralGate.js?v=59";
 import {CathedralInterior} from "./cathedralInterior.js?v=59";
 import {bindControls} from "./controls.js?v=11";
@@ -18,7 +18,7 @@ const gate=new CathedralGate();
 const interior=new CathedralInterior(world);
 const dialogue=new SvarConversation(finished=>{
   if(player){player.vx=0;player.input.moveX=0;player.input.moveY=0;player.input.block=false;player.input.attack=false;player.input.jump=false;player.input.dodge=false;player.input.heal=false}
-  if(finished&&scene==='bridge')questText.textContent='Reach the abandoned cathedral beneath the Blood Moon.';
+  if(finished&&scene==='bridge'){svar?.startGuide();questText.textContent=svar?.arrived?'Enter the cathedral. The beasts and their portal lie ahead.':'Follow S’var to the cathedral door.';}
 });
 let scene='bridge',transitioning=false;
 window.FRACTURED_MAP={get screens(){return world.worldWidth/world.viewportWidth},get worldWidth(){return world.worldWidth},get cameraX(){return world.cameraX}};
@@ -33,7 +33,7 @@ function bridgeSurfaceY(){
   }
   return innerHeight*GROUND_RATIO+2;
 }
-function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();const outdoorWidth=world.worldWidth;interior.resize();if(scene==='cathedral')interior.setActive(true);ruins.resize(outdoorWidth,w,bridgeSurfaceY(),h);gate.resize(outdoorWidth,bridgeSurfaceY(),h);if(player){const elevation=player.groundY-player.y;player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();player.obstacles=scene==='bridge'?ruins.solids:[];if(player.onGround)player.y=player.groundY-elevation;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(svar)svar.groundY=bridgeSurfaceY()}
+function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();const outdoorWidth=world.worldWidth;interior.resize();if(scene==='cathedral')interior.setActive(true);ruins.resize(outdoorWidth,w,bridgeSurfaceY(),h);gate.resize(outdoorWidth,bridgeSurfaceY(),h);if(player){const elevation=player.groundY-player.y;player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();player.obstacles=scene==='bridge'?ruins.solids:[];if(player.onGround)player.y=player.groundY-elevation;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(svar)svar.configureRoute(ruins.solids,gate.doorX,bridgeSurfaceY())}
 addEventListener("resize",resize,{passive:true});resize();
 function enterWorld(config){if(window.FRACTURED.started)return;buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;window.FRACTURED.loading=false;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY(),config);player.worldWidth=world.worldWidth;player.obstacles=ruins.solids;svar=new SvarNpc(Math.min(world.worldWidth-75,player.x+240),bridgeSurfaceY());dialogue.origin=config.origin;world.setCamera(0);
 // Exactly one playable actor exists. Keep legacy names exclusive to the chosen origin.

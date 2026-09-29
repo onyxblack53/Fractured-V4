@@ -1,4 +1,16 @@
 const NODES={
+  cathedral: {
+    speech:"The beasts are just ahead. I barely escaped the castle through this cathedral. There’s a portal further inside, and those demons are crawling their way out. This is as far as I go. Be ready before you step through that door.",
+    choices:[['What did you see at the portal?','portal'],['How did you escape?','escape'],['I’ll take it from here.','leave']]
+  },
+  portal: {
+    speech:"A tear in the world. Those clawed beasts were dragging themselves through it, one after another. The portal is still open. Whatever you hear beyond this door, keep your weapons ready.",
+    choices:[['Tell me about your escape.','escape'],['Back','greeting'],['I’ll take it from here.','leave']]
+  },
+  escape: {
+    speech:"I fled the castle through the cathedral. I could hear their claws on the stone behind me. I barely made it outside. I won’t go back in, but you know the way now.",
+    choices:[['Tell me about the portal.','portal'],['Back','greeting'],['I’ll take it from here.','leave']]
+  },
   greeting: {
     speech:"Well, another soul on Aradavia's broken road. The sky has been tearing since the Thirteenth Scholar's ritual. I am S’var. Come closer; I can tell you what happened and how to cross these ruins.",
     choices:[['What happened to Aradavia?','history'],['Who are you?','identity'],['Show me how to survive.','tutorial'],['I’m ready to go.','leave']]
@@ -33,6 +45,11 @@ export class SvarConversation {
     this.prompt=document.getElementById('svar-prompt');
     this.target=document.getElementById('svar-target');
     this.canInteract=false;
+    this.promptDismissed=false;
+    this.doorPromptDismissed=false;
+    this.atDoor=false;
+    try{this.doorPromptDismissed=localStorage.getItem('fractured.svar.doorPromptDismissed')==='1'}catch{}
+    try{this.promptDismissed=localStorage.getItem('fractured.svar.promptDismissed')==='1'}catch{}
     this.onLeave=onLeave;
     this.opened=false;
     this.finished=false;
@@ -47,6 +64,9 @@ export class SvarConversation {
     if(this.opened)return;
     this.origin=origin;
     this.opened=true;
+    if(this.atDoor)this.doorPromptDismissed=true;else this.promptDismissed=true;
+    const key=this.atDoor?'fractured.svar.doorPromptDismissed':'fractured.svar.promptDismissed';
+    try{localStorage.setItem(key,'1')}catch{}
     this.prompt.hidden=true;
     this.target.hidden=true;
     this.canInteract=false;
@@ -57,6 +77,7 @@ export class SvarConversation {
   }
   show(id) {
     if(id==='leave'){this.close(true);return}
+    if(id==='greeting'&&this.atDoor)id='cathedral';
     const node=NODES[id];
     this.speech.textContent=id==='origin'
       ? this.origin==='demonic-rogue'
@@ -80,15 +101,16 @@ export class SvarConversation {
     this.onLeave?.(this.finished);
   }
   updatePrompt(npc,player,cameraX,scene,blocked,viewportHeight) {
+    if(!this.opened)this.atDoor=!!npc?.arrived;
     const show=!!(scene==='bridge'&&!blocked&&!this.opened&&npc?.canTalk(player));
     this.canInteract=show;
-    this.prompt.hidden=!show;
+    this.prompt.hidden=!show||(this.atDoor?this.doorPromptDismissed:this.promptDismissed);
     this.target.hidden=!show;
     if(show){
       const x=npc.x-cameraX,h=npc.height(viewportHeight);
       this.prompt.style.left=`${Math.max(76,Math.min(innerWidth-76,x))}px`;
-      this.prompt.style.top=`${Math.max(12,npc.groundY-h-44)}px`;
-      Object.assign(this.target.style,{left:`${x-48}px`,top:`${npc.groundY-h}px`,width:'96px',height:`${h}px`});
+      this.prompt.style.top=`${Math.max(12,npc.y-h-44)}px`;
+      Object.assign(this.target.style,{left:`${x-48}px`,top:`${npc.y-h}px`,width:'96px',height:`${h}px`});
     }
   }
 }
