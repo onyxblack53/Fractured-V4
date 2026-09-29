@@ -10,7 +10,7 @@ export class SvarNpc {
       image.src=`./svar-jester-v65-cower_${String(i).padStart(2,'0')}.png?v=66`;
     }))).then(results=>this.loaded=results.every(Boolean));
   }
-  height(viewportHeight){return Math.max(145,Math.min(205,viewportHeight*.19))}
+  height(viewportHeight){return .75*Math.max(145,Math.min(205,viewportHeight*.19))}
   near(player,range=125){return !!player&&!player.dead&&player.onGround&&Math.abs(player.x-this.x)<=range&&Math.abs(player.y-this.groundY)<62}
   canTalk(player){return this.loaded&&this.state==='idle'&&this.near(player)}
   update(dt,player,paused=false){
@@ -26,7 +26,7 @@ export class SvarNpc {
     if(!this.loaded||this.x<cameraX-150||this.x>cameraX+viewportWidth+150)return;
     const size=this.height(viewportHeight)*512/400;
     ctx.save();
-    ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.ellipse(this.x,this.groundY+1,25,4,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.ellipse(this.x,this.groundY+1,18.75,3,0,0,Math.PI*2);ctx.fill();
     ctx.drawImage(this.images[this.frame],this.x-size/2,this.groundY-size*480/512,size,size);
     ctx.restore();
   }
