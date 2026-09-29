@@ -28,3 +28,10 @@
 #rpgMenu .enh-option b,#rpgMenu .enh-option small{display:block}#rpgMenu .enh-option small{margin-top:6px;color:#c2b7c7;line-height:1.5;font-size:12px}#rpgMenu .enh-option.equipped{border-color:#e5c783;background:#332737}
 #enh-remove{display:block;width:100%;margin-top:14px;padding:12px;background:transparent;border:1px solid #66535d;border-radius:8px}#enh-feedback{min-height:18px;font-size:12px;color:#e6ce92}
 #ability-slots .ability>span{font-size:clamp(8px,2.2vw,12px);line-height:1.2;white-space:normal}
+
+/* Compact gameplay labels; ability names remain available to screen readers. */
+#ability-slots .ability>span{font-size:0!important;line-height:1;letter-spacing:0}
+#ability-slots .ability>span::after{font-size:20px;font-weight:800;line-height:1;letter-spacing:.04em}
+#ability1-btn>span::after{content:"I"}
+#ability2-btn>span::after{content:"II"}
+#ability3-btn>span::after{content:"III"}
