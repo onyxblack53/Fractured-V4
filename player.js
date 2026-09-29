@@ -193,33 +193,43 @@ export class Player{
       if(Math.abs(this.vx)<0.5)this.vx=0;
     }
 
-    if(!this.onGround){
-      this.vy+=this.gravity*dt;
-      this.y+=this.vy*dt;
-
-      if(this.vy>60&&!this.state.startsWith("attack")&&this.state!=="dodge"){
-        this.setState("fall");
-      }
-
-      if(this.y>=this.groundY){
-        this.y=this.groundY;
-        this.vy=0;
-        this.onGround=true;
-        if(!locked)this.setState("land",true);
-      }
-    }
-
     const previousX=this.x;
     this.x+=this.vx*dt;
     const radius=this.renderHeight*.14;
     for(const obstacle of this.obstacles){
-      // Once the feet rise above the pile, horizontal movement passes over it.
+      // Solid side until the character's feet clear the climbable top.
       if(this.y<=this.groundY-obstacle.h+3)continue;
       if(this.x+radius<=obstacle.x||this.x-radius>=obstacle.x+obstacle.w)continue;
       const left=obstacle.x-radius,right=obstacle.x+obstacle.w+radius;
       this.x=previousX<=left?left:previousX>=right?right:
         Math.abs(previousX-left)<Math.abs(previousX-right)?left:right;
       this.vx=0;
+    }
+
+    // Walking off an obstacle begins a real fall; standing on it permits jumping.
+    if(this.onGround&&this.y<this.groundY-2&&!this.obstacles.some(o=>
+      this.x>=o.x&&this.x<=o.x+o.w&&Math.abs(this.y-(this.groundY-o.h))<3)){
+      this.onGround=false;this.vy=0;
+    }
+    if(!this.onGround){
+      const previousY=this.y;
+      this.vy+=this.gravity*dt;
+      this.y+=this.vy*dt;
+      if(this.vy>60&&!this.state.startsWith("attack")&&this.state!=="dodge")this.setState("fall");
+      if(this.vy>=0){
+        for(const obstacle of this.obstacles){
+          const top=this.groundY-obstacle.h;
+          if(this.x>=obstacle.x&&this.x<=obstacle.x+obstacle.w&&previousY<=top+2&&this.y>=top){
+            this.y=top;this.vy=0;this.onGround=true;
+            if(!locked)this.setState("land",true);
+            break;
+          }
+        }
+      }
+      if(!this.onGround&&this.y>=this.groundY){
+        this.y=this.groundY;this.vy=0;this.onGround=true;
+        if(!locked)this.setState("land",true);
+      }
     }
 
     const margin=45;

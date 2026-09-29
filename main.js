@@ -1,8 +1,8 @@
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=50";
-import {Player} from "./player.js?v=51";
-import {Ruins} from "./ruins.js?v=51";
-import {GoblinEnemy} from "./goblinEnemy.js?v=51";
+import {Player} from "./player.js?v=52";
+import {Ruins} from "./ruins.js?v=52";
+import {GoblinEnemy} from "./goblinEnemy.js?v=52";
 import {bindControls} from "./controls.js?v=11";
 import {initMenus} from "./menus.js?v=44";
 import {WorldExtension} from "./worldExtension.js?v=20";
@@ -23,7 +23,7 @@ function bridgeSurfaceY(){
   }
   return innerHeight*GROUND_RATIO+2;
 }
-function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();ruins.resize(world.worldWidth,w,bridgeSurfaceY(),h);if(player){player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();player.obstacles=ruins.solids;if(player.onGround)player.y=player.groundY;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(goblin){goblin.groundY=bridgeSurfaceY();goblin.obstacles=ruins.solids;if(goblin.onGround)goblin.y=goblin.groundY;}}
+function resize(){const ratio=Math.min(devicePixelRatio||1,2),w=innerWidth,h=innerHeight;canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);canvas.style.width=w+"px";canvas.style.height=h+"px";ctx.setTransform(ratio,0,0,ratio,0,0);world.resize();ruins.resize(world.worldWidth,w,bridgeSurfaceY(),h);if(player){const elevation=player.groundY-player.y;player.worldWidth=world.worldWidth;player.groundY=bridgeSurfaceY();player.obstacles=ruins.solids;if(player.onGround)player.y=player.groundY-elevation;player.x=Math.max(45,Math.min(world.worldWidth-45,player.x))}if(goblin){const elevation=goblin.groundY-goblin.y;goblin.groundY=bridgeSurfaceY();goblin.obstacles=ruins.solids;if(goblin.onGround)goblin.y=goblin.groundY-elevation;}}
 addEventListener("resize",resize,{passive:true});resize();
 function enterWorld(config){if(window.FRACTURED.started)return;buildConfig=config;window.FRACTURED.buildConfig=config;window.FRACTURED.started=true;window.FRACTURED.loading=false;document.querySelectorAll(".flow-screen").forEach(s=>s.classList.remove("active"));document.getElementById("game-shell").classList.add("active");player=new Player(innerWidth*.36,bridgeSurfaceY(),config);player.worldWidth=world.worldWidth;player.obstacles=ruins.solids;goblin=new GoblinEnemy(Math.min(world.worldWidth-70,player.x+Math.min(225,innerWidth*.50)),bridgeSurfaceY());goblin.obstacles=ruins.solids;world.setCamera(0);
 // Exactly one playable actor exists. Keep legacy names exclusive to the chosen origin.

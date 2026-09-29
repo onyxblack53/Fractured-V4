@@ -13,24 +13,18 @@ export class Ruins{
     this.solids=[];
   }
   resize(worldWidth,viewportWidth,groundY,viewportHeight){
-    const rubbleHeight=Math.max(30,Math.min(43,viewportHeight*.046));
+    // A climbable broken wall: tall enough to stop a run, below jump apex.
+    const rubbleHeight=Math.max(65,Math.min(90,viewportHeight*.095));
     const rubbleWidth=rubbleHeight*2;
-    const archHeight=Math.max(85,Math.min(125,viewportHeight*.13));
+    const archHeight=Math.max(240,Math.min(360,viewportHeight*.32));
     const first=Math.max(viewportWidth+140,worldWidth*.35);
-    const fractions=[0,.28,.58,1];
     const span=Math.max(0,worldWidth-first-130);
     const props=[];
-    for(let i=0;i<fractions.length;i++){
-      const x=first+span*fractions[i];
-      props.push({kind:'rubble',x,w:rubbleWidth,h:rubbleHeight,groundY,solid:true});
-    }
-    for(const fraction of [.45,.78]){
-      const x=first+span*fraction;
-      props.push({kind:'arch',x,w:archHeight*.96,h:archHeight,groundY,solid:false});
-    }
+    props.push({kind:'rubble',x:first+span*.38,w:rubbleWidth,h:rubbleHeight,groundY,solid:true});
+    props.push({kind:'arch',x:first+span*.78,w:archHeight*.96,h:archHeight,groundY,solid:false});
     this.props=props.sort((a,b)=>a.x-b.x);
     // The collision box follows the dense center of the loose stones.
-    this.solids=props.filter(p=>p.solid).map(p=>({x:p.x+4,w:p.w-8,h:p.h*.76}));
+    this.solids=props.filter(p=>p.solid).map(p=>({x:p.x+8,w:p.w-16,h:p.h*.82}));
   }
   draw(ctx,cameraX,viewportWidth){
     for(const prop of this.props){

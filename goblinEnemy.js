@@ -118,7 +118,7 @@ export class GoblinEnemy {
           this.vx=this.facing*(dist>210?126:64);
           if(this.onGround)this.setState(dist>210?'run':'walk');
           if(dist>125&&this.jumpCooldown===0&&this.onGround&&Math.random()<dt*.38){
-            this.onGround=false;this.vy=-400;this.jumpCooldown=4.5;
+            this.onGround=false;this.vy=-520;this.jumpCooldown=4.5;
             this.setState('jump',true);
           }
         }else{this.vx=0;if(this.onGround)this.setState('idle');}
@@ -133,7 +133,7 @@ export class GoblinEnemy {
     const previousX=this.x;
     if(this.onGround&&Math.abs(this.vx)>1&&this.jumpCooldown<=0&&this.obstacles?.some(o=>
       this.vx>0?o.x-this.x>0&&o.x-this.x<48:this.x-(o.x+o.w)>0&&this.x-(o.x+o.w)<48)){
-      this.onGround=false;this.vy=-400;this.jumpCooldown=1.8;this.setState('jump',true);
+      this.onGround=false;this.vy=-520;this.jumpCooldown=1.8;this.setState('jump',true);
     }
     this.x=clamp(this.x+this.vx*dt,50,Math.max(50,worldWidth-50));
     for(const o of this.obstacles||[]){
@@ -151,10 +151,23 @@ export class GoblinEnemy {
       this.x=clamp(desired,50,Math.max(50,worldWidth-50));
       this.vx=0;
     }
+    if(this.onGround&&this.y<this.groundY-2&&!this.obstacles?.some(o=>
+      this.x>=o.x&&this.x<=o.x+o.w&&Math.abs(this.y-(this.groundY-o.h))<3)){
+      this.onGround=false;this.vy=0;
+    }
     if(!this.onGround){
+      const previousY=this.y;
       this.vy+=1450*dt;this.y+=this.vy*dt;
-      if(this.y>=this.groundY){this.y=this.groundY;this.vy=0;this.onGround=true;this.setState('land',true);}
-    }else this.y=this.groundY;
+      if(this.vy>=0){
+        for(const o of this.obstacles||[]){
+          const top=this.groundY-o.h;
+          if(this.x>=o.x&&this.x<=o.x+o.w&&previousY<=top+2&&this.y>=top){
+            this.y=top;this.vy=0;this.onGround=true;this.setState('land',true);break;
+          }
+        }
+      }
+      if(!this.onGround&&this.y>=this.groundY){this.y=this.groundY;this.vy=0;this.onGround=true;this.setState('land',true);}
+    }
   }
   draw(ctx){
     if (!this.assetsLoaded) return;
