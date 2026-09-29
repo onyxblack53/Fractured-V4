@@ -21,7 +21,8 @@ export class Ruins{
     const span=Math.max(0,worldWidth-first-130);
     const props=[];
     props.push({kind:'rubble',x:first+span*.34,w:rubbleWidth,h:rubbleHeight,groundY,solid:true});
-    props.push({kind:'arch',x:first+span*.78,w:archHeight*.96,h:archHeight,groundY,solid:false});
+    // Leave the final stretch clear for the cathedral's walk-in opening.
+    props.push({kind:'arch',x:first+span*.62,w:archHeight*.96,h:archHeight,groundY,solid:false});
     this.props=props.sort((a,b)=>a.x-b.x);
     // Three landable rises match the visible stones: loose rocks, middle ledge,
     // then the top slab. Keep their heights below the player's jump reach.
