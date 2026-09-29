@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./styles.css?v=40">
   <link rel="stylesheet" href="./bridge-overlay-v23.css?v=23">
   <link rel="stylesheet" href="./svarConversation.css?v=66">
+  <link rel="stylesheet" href="./enhancements.css?v=71">
 </head>
 <body>
 <div id="app">
@@ -62,10 +63,15 @@
     </section>
   </main>
   <div id="rpgMenu" aria-hidden="true"><nav class="menuTop"><button class="menuTab active" data-page="character">CHARACTER</button><button class="menuTab" data-page="inventory">INVENTORY</button><button id="menu-close" class="menuClose">×</button></nav>
-    <main id="characterPage" class="menuPage active"><div class="charLayout"><div id="leftEquip" class="equipCol"></div><div class="charCenter"><img id="character-preview" alt="Angel Knight preview"><h2 id="bloodlineText">ANGEL · KNIGHT</h2><div id="bloodlineTier" class="bloodline">ANGELIC KNIGHT</div></div><div id="rightEquip" class="equipCol"></div></div><div class="levelRow">LEVEL 1<div class="xpbar"><i></i></div></div><div id="statColumns" class="statColumns"></div></main>
-    <main id="inventoryPage" class="menuPage"><div class="inventoryBody"><div id="invGrid" class="invGrid"></div><aside id="itemDetail" class="itemDetail"></aside></div><div class="menuFooter">Equip · Compare · Sort · Back</div></main>
+    <main id="characterPage" class="menuPage active">
+      <p class="enh-eyebrow">ENHANCEMENTS</p><div id="enhancement-slots" aria-label="Enhancement slots"></div>
+      <div class="enh-character"><canvas id="character-preview" width="600" height="600" aria-label="Your character"></canvas><div id="character-abilities" aria-label="Equipped abilities"></div><h2 id="bloodlineText"></h2><p id="bloodlineTier"></p></div>
+      <div id="statColumns" aria-live="polite"></div>
+    </main>
+    <main id="inventoryPage" class="menuPage"><h2>Enhancements</h2><p class="enh-note">Starter collection · Select a category to equip an enhancement.</p><div id="enh-inventory"></div></main>
+    <section id="enh-picker" role="dialog" aria-modal="true" aria-labelledby="enh-picker-title" hidden><div class="enh-picker-card"><header><h2 id="enh-picker-title"></h2><button id="enh-picker-close" aria-label="Close enhancement selection">×</button></header><p id="enh-picker-note" class="enh-note">Choose one enhancement for this slot.</p><div id="enh-options"></div><button id="enh-remove">Remove enhancement</button><p id="enh-feedback" role="status"></p></div></section>
   </div>
 </div>
-<script type="module" src="./main.js?v=70"></script>
+<script type="module" src="./main.js?v=71"></script>
   <script type="module" src="./bridge-world-v23.js?v=23"></script>
 </body></html>

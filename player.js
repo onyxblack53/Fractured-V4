@@ -1,3 +1,4 @@
+import {applyEnhancements,loadEnhancements} from "./enhancements.js?v=71";
 import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=49";
 import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
 
@@ -47,6 +48,7 @@ export class Player{
 
     this.renderer=build.origin==="demonic-rogue"?new DemonicRogueRenderer():new AngelKnightSpriteRenderer();
     if(this.origin==="demonic-rogue"){this.speed=195;this.runSpeed=255;}
+    applyEnhancements(this,loadEnhancements(this.origin));
   }
 
   setState(next,force=false){
@@ -261,7 +263,7 @@ export class Player{
       return true;
     }
 
-    this.hp=Math.max(0,this.hp-amount);
+    this.hp=Math.max(0,this.hp-amount*(1-this.damageResistance));
     this.facing=fromX<this.x?-1:1;
 
     if(this.hp<=0){
@@ -289,7 +291,7 @@ export class Player{
       y:this.y+h.y*scale,
       w:h.w*scale,
       h:h.h*scale,
-      damage:h.damage,
+      damage:h.damage*this.damageMultiplier,
       knockback:h.knockback
     };
   }

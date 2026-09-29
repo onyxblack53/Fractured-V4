@@ -1,13 +1,14 @@
+import {abilityCatalog,loadAbilities} from "./abilityLoadout.js?v=71";
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=50";
-import {Player} from "./player.js?v=54";
+import {Player} from "./player.js?v=71";
 import {Ruins} from "./ruins.js?v=59";
 import {SvarNpc} from "./svarNpc.js?v=70";
 import {SvarConversation} from "./svarConversation.js?v=70";
 import {CathedralGate} from "./cathedralGate.js?v=59";
 import {CathedralInterior} from "./cathedralInterior.js?v=59";
 import {bindControls} from "./controls.js?v=11";
-import {initMenus} from "./menus.js?v=44";
+import {initMenus} from "./menus.js?v=71";
 import {WorldExtension} from "./worldExtension.js?v=20";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
@@ -43,6 +44,7 @@ window.FRACTURED.demonicRogue=config.origin==='demonic-rogue'?player:null;
 window.FRACTURED.svar=svar;
 window.FRACTURED.scene=scene;
 svar.ready.then(loaded=>{if(!loaded){const toast=document.getElementById("toast");toast.textContent="S’var artwork could not load. Reload to retry.";toast.classList.add("show");}});
+refreshAbilities();
 if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=config.displayName;resize();last=performance.now()}
 function beginGame(config){if(window.FRACTURED.loading||window.FRACTURED.started)return;
 if(!['angelic-knight','demonic-rogue'].includes(config?.origin))throw new Error('Choose Angelic Knight or Demonic Rogue before entering the world');
@@ -50,22 +52,30 @@ window.FRACTURED.loading=true;buildConfig=config;document.querySelectorAll(".flo
 window.FRACTURED={...(window.FRACTURED||{}),buildConfig:null,started:false,loading:false,player:null,angelKnight:null,demonicRogue:null,svar:null,menuPaused:false,scene};
 new CharacterCreator(beginGame);initMenus(()=>buildConfig);
 const abilityCooldowns=new AbilityCooldowns([4,6,8]);
-const abilityLabels=["Radiant Burst","Aegis of Heaven","Falling Star"];
+let equippedAbilities=[null,null,null];
+const abilityLabels=["Empty","Empty","Empty"];
+function refreshAbilities(){const origin=player?.origin||buildConfig?.origin;const catalog=abilityCatalog(origin);equippedAbilities=loadAbilities(origin).map(id=>catalog.find(a=>a.id===id)||null);equippedAbilities.forEach((a,i)=>{abilityLabels[i]=a?.name||"Empty";abilityCooldowns.durations[i]=a?.cooldown||4});}
+addEventListener("fractured:abilities-changed",()=>{refreshAbilities();renderAbilities()});
 const abilityButtons=abilityLabels.map((label,i)=>document.getElementById(`ability${i+1}-btn`));
 function renderAbilities(){
   abilityButtons.forEach((button,i)=>{
     const remaining=abilityCooldowns.remaining[i];
-    button.disabled=!player||player.dead||dialogue.opened||remaining>0;
+    button.disabled=!player||!equippedAbilities[i]||player.dead||dialogue.opened||remaining>0;
+    button.querySelector("span").textContent=abilityLabels[i];
     button.querySelector('.cooldown').textContent=remaining>0?`${Math.ceil(remaining)}s`:'';
     button.style.setProperty('--cooldown-fill',`${remaining/abilityCooldowns.durations[i]*100}%`);
     button.setAttribute('aria-label',`${abilityLabels[i]}${remaining>0?`, ${Math.ceil(remaining)} seconds remaining`:`, ready`}`);
   });
 }
 abilityButtons.forEach((button,i)=>button.onclick=()=>{
-  if(!player||player.dead||dialogue.opened||document.getElementById('rpgMenu').classList.contains('open')||!abilityCooldowns.use(i))return;
+  if(!player||player.dead||dialogue.opened||document.getElementById('rpgMenu').classList.contains('open')||!equippedAbilities[i]||abilityCooldowns.remaining[i]>0)return;
+  const cast=window.FRACTURED.castAbility;
+  if(typeof cast!=='function'){const notice=document.getElementById('toast');notice.textContent=abilityLabels[i]+' — casting is not connected yet';notice.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>notice.classList.remove('show'),1800);return;}
+  if(cast(equippedAbilities[i].id,player)===false)return;
+  abilityCooldowns.use(i);
   renderAbilities();
   const toast=document.getElementById('toast');
-  toast.textContent=abilityLabels[i]+" — combat effect coming soon";
+  toast.textContent=abilityLabels[i];
   toast.classList.add('show');clearTimeout(window.__toast);
   window.__toast=setTimeout(()=>toast.classList.remove('show'),1200);
 });

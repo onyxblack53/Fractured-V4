@@ -1,35 +1,42 @@
-import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=44";
-const EQUIPMENT=[["HEAD","Celestial Helm"],["CHEST","Seraph Plate"],["ARMS","Vambraces"],["LEGS","Greaves"],["MAIN","Divine Sword"],["OFF","Aegis Shield"]];
-const INVENTORY=["Celestial Helm","Seraph Plate","Vambraces","Greaves","Divine Sword","Aegis Shield","Radiant Flask","Fracture Shard"];
+import {SLOTS,loadEnhancements,saveEnhancements,applyEnhancements,bonuses} from './enhancements.js?v=71';
+import {abilityCatalog,loadAbilities,saveAbilities,assignAbility} from './abilityLoadout.js?v=71';
 export function initMenus(getBuild){
-  const menu=document.getElementById("rpgMenu"),charPage=document.getElementById("characterPage"),invPage=document.getElementById("inventoryPage"),preview=document.getElementById("character-preview");
-  document.getElementById("leftEquip").innerHTML=EQUIPMENT.slice(0,3).map(slotHTML).join("");document.getElementById("rightEquip").innerHTML=EQUIPMENT.slice(3).map(slotHTML).join("");
-  document.getElementById("statColumns").innerHTML=[["24","VITALITY"],["21","STRENGTH"],["18","DEXTERITY"],["16","FAITH"],["14","ARCANE"],["12","RESIST"]].map(([v,n])=>`<div class="stat"><b>${v}</b><span>${n}</span></div>`).join("");
-  document.getElementById("invGrid").innerHTML=INVENTORY.map((n,i)=>`<button class="invItem${i===0?" selected":""}" data-item="${n}"><b>${n}</b><small>${i<6?"Equippable":"Item"}</small></button>`).join("");
-  const detail=document.getElementById("itemDetail");detail.innerHTML="<h3>Celestial Helm</h3><p>Angel Knight equipment.</p>";
-  document.getElementById("invGrid").onclick=e=>{const b=e.target.closest(".invItem");if(!b)return;document.querySelectorAll(".invItem").forEach(x=>x.classList.toggle("selected",x===b));detail.innerHTML=`<h3>${b.dataset.item}</h3><p>Inventory item.</p>`};
-  function refresh(){const build=getBuild();if(build){
-const rogue=build.origin==='demonic-rogue';
-const equipment=rogue?[["HEAD","Shadow Hood"],["CHEST","Night Leather"],["ARMS","Rogue Wraps"],["LEGS","Silent Boots"],["MAIN","Abyss Dagger"],["OFF","Shadow Dagger"]]:EQUIPMENT;
-document.getElementById('leftEquip').innerHTML=equipment.slice(0,3).map(slotHTML).join('');document.getElementById('rightEquip').innerHTML=equipment.slice(3).map(slotHTML).join('');
-document.getElementById('invGrid').innerHTML=[...equipment.map(e=>e[1]),'Restoring Flask','Fracture Shard'].map((n,i)=>`<button class="invItem" data-item="${n}"><b>${n}</b><small>${i<6?'Equippable':'Item'}</small></button>`).join('');detail.textContent='Select an item to inspect.';
-document.getElementById("bloodlineText").textContent=`${build.races.join(" / ")} · ${build.className}`;document.getElementById("bloodlineTier").textContent=build.displayName||"Angelic Knight"}startPreview()}
-  function open(page){refresh();menu.classList.add("open");menu.setAttribute("aria-hidden","false");document.querySelectorAll(".menuPage").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".menuTab").forEach(x=>x.classList.remove("active"));if(page==="inventory"){invPage.classList.add("active");document.querySelector('[data-page="inventory"]').classList.add("active")}else{charPage.classList.add("active");document.querySelector('[data-page="character"]').classList.add("active")}}
-  const close=()=>{menu.classList.remove("open");menu.setAttribute("aria-hidden","true")};document.getElementById("menu-character").onclick=()=>open("character");document.getElementById("menu-inventory").onclick=()=>open("inventory");document.getElementById("menu-close").onclick=close;document.querySelectorAll(".menuTab[data-page]").forEach(b=>b.onclick=()=>open(b.dataset.page));
-  let roguePreview=null,previewStarted=false,frame=0;
-  function renderPreview(){
-    if(getBuild()?.origin==='demonic-rogue'){
-      roguePreview??=new DemonicRogueRenderer();
-      const c=document.createElement('canvas');c.width=240;c.height=240;
-      roguePreview.draw(c.getContext('2d'),120,215,1,210,false);
-      if(roguePreview.images.idle.complete&&roguePreview.images.idle.naturalWidth)preview.src=c.toDataURL();
-    }else{frame=(frame+1)%4;preview.src=`./idle_${frame}.png?v=36`}
-  }
-  function startPreview(){
-    if(getBuild()?.origin==='demonic-rogue')preview.removeAttribute('src');
-    renderPreview();
-    if(previewStarted)return;
-    previewStarted=true;setInterval(renderPreview,200);
-  }
+ const $=id=>document.getElementById(id),menu=$('rpgMenu'),picker=$('enh-picker');
+ let origin='angelic-knight',loadout={},abilities=[],selection=null,returnFocus=null,previewRenderer=null,previewOwner=null,last=0;
+ const player=()=>window.FRACTURED?.player;
+ function clearInput(){const p=player();if(p){p.vx=0;for(const k in p.input)p.input[k]=typeof p.input[k]==='boolean'?false:0}}
+ function button(label,cls,click){const b=document.createElement('button');b.type='button';b.className=cls;b.onclick=click;b.textContent=label;return b}
+ function slotButton(icon,name,sub,click){const wrap=document.createElement('div');wrap.className='enh-slot-wrap';const b=button(icon,'enh-circle',()=>{returnFocus=b;click()});b.setAttribute('aria-label',name+': '+sub);b.title=name+': '+sub;const title=document.createElement('b');title.textContent=name;const small=document.createElement('small');small.textContent=sub;wrap.append(b,title,small);return wrap}
+ function refresh(){
+  origin=getBuild()?.origin||player()?.origin||'angelic-knight';loadout=loadEnhancements(origin);abilities=loadAbilities(origin);
+  $('bloodlineText').textContent=origin==='demonic-rogue'?'Demonic Rogue':'Angelic Knight';$('bloodlineTier').textContent='LEVEL 1';
+  $('enhancement-slots').replaceChildren(...SLOTS.map(s=>{const item=s.items.find(i=>i.id===loadout[s.id]);return slotButton(s.icon,s.name,item?.name||'Empty',()=>openPicker('enhancement',s.id))}));
+  const catalog=abilityCatalog(origin);
+  $('character-abilities').replaceChildren(...abilities.map((id,i)=>{const a=catalog.find(a=>a.id===id);return slotButton(a?.icon||'+',['I','II','III'][i],a?.name||'Empty',()=>openPicker('ability',i))}));
+  const b=bonuses(loadout),p=player();
+  $('statColumns').replaceChildren(...[[p?.maxHp||100,'HEALTH'],[p?.maxStamina||100,'STAMINA'],['+'+Math.round(b.damage*100)+'%','DAMAGE'],[Math.round(b.resist*100)+'%','RESISTANCE'],['+'+Math.round(b.speed*100)+'%','MOVEMENT']].map(([v,n])=>{const d=document.createElement('div');d.className='enh-stat';const strong=document.createElement('b');strong.textContent=v;const span=document.createElement('span');span.textContent=n;d.append(strong,span);return d}));
+  const inv=$('enh-inventory');inv.replaceChildren(...SLOTS.map(s=>button(s.icon+' '+s.name+' · '+s.items.length+' enhancements','enh-category',()=>openPicker('enhancement',s.id))),...abilities.map((id,i)=>button('Ability '+['I','II','III'][i]+' · '+(catalog.find(a=>a.id===id)?.name||'Empty'),'enh-category',()=>openPicker('ability',i))));
+ }
+ function closePicker(){picker.hidden=true;$('characterPage').inert=false;$('inventoryPage').inert=false;menu.querySelector('.menuTop').inert=false;returnFocus?.focus()}
+ function commit(id){
+  if(selection.kind==='enhancement'){if(id)loadout[selection.key]=id;else delete loadout[selection.key];saveEnhancements(origin,loadout);applyEnhancements(player(),loadout)}
+  else{abilities=assignAbility(origin,abilities,selection.key,id);saveAbilities(origin,abilities);window.dispatchEvent(new CustomEvent('fractured:abilities-changed',{detail:{origin,slots:abilities}}))}
+  const current={...selection};refresh();openPicker(current.kind,current.key);$('enh-feedback').textContent=id?'Equipped.':'Slot cleared.';
+ }
+ function openPicker(kind,key){
+  selection={kind,key};picker.hidden=false;$('characterPage').inert=true;$('inventoryPage').inert=true;menu.querySelector('.menuTop').inert=true;$('enh-feedback').textContent='';
+  const slot=SLOTS.find(s=>s.id===key),items=kind==='enhancement'?slot.items:abilityCatalog(origin);
+  $('enh-picker-title').textContent=kind==='enhancement'?slot.name+' enhancements':'Ability '+['I','II','III'][key];
+  $('enh-picker-note').textContent=kind==='enhancement'?'Choose one enhancement for this slot.':'Choose an ability. Selecting one already equipped swaps the slots.';
+  $('enh-options').replaceChildren(...items.map(item=>{const active=kind==='enhancement'?loadout[key]===item.id:abilities[key]===item.id;const b=button('','enh-option'+(active?' equipped':''),()=>commit(item.id));b.setAttribute('aria-pressed',String(active));const name=document.createElement('b');name.textContent=item.name+(active?' · Equipped':'');const desc=document.createElement('small');desc.textContent=item.text+(kind==='ability'?' · '+item.cooldown+'s cooldown':'');b.append(name,desc);return b}));
+  if(!items.length){const p=document.createElement('p');p.textContent='No abilities learned for this character yet.';$('enh-options').append(p)}
+  $('enh-remove').textContent=kind==='ability'?'Clear ability slot':'Remove enhancement';$('enh-remove').onclick=()=>commit(null);$('enh-picker-close').focus();
+ }
+ function open(page){refresh();menu.classList.add('open');menu.setAttribute('aria-hidden','false');clearInput();closePicker();for(const p of menu.querySelectorAll('.menuPage'))p.classList.toggle('active',p.id===(page==='inventory'?'inventoryPage':'characterPage'));for(const t of menu.querySelectorAll('.menuTab'))t.classList.toggle('active',t.dataset.page===page);menu.scrollTop=0;if(previewOwner!==player()&&player()){previewOwner=player();previewRenderer=new (player().renderer.constructor)();previewRenderer.setState('idle',true)}$('menu-close').focus()}
+ function close(){closePicker();menu.classList.remove('open');menu.setAttribute('aria-hidden','true');clearInput();$('menu-character').focus()}
+ $('menu-character').onclick=()=>open('character');$('menu-inventory').onclick=()=>open('inventory');$('menu-close').onclick=close;$('enh-picker-close').onclick=closePicker;
+ menu.querySelectorAll('.menuTab').forEach(b=>b.onclick=()=>open(b.dataset.page));
+ picker.addEventListener('click',e=>{if(e.target===picker)closePicker()});
+ menu.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();picker.hidden?close():closePicker()}if(e.key==='Tab'&&!picker.hidden){const all=[...picker.querySelectorAll('button')],first=all[0],end=all.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();end.focus()}else if(!e.shiftKey&&document.activeElement===end){e.preventDefault();first.focus()}}});
+ function preview(now){if(menu.classList.contains('open')&&previewRenderer&&$('characterPage').classList.contains('active')){const c=$('character-preview'),ctx=c.getContext('2d');ctx.clearRect(0,0,600,600);previewRenderer.update(Math.min(.04,(now-last)/1000||.016),()=>{});previewRenderer.draw(ctx,300,565,1,origin==='demonic-rogue'?440:530,true)}last=now;requestAnimationFrame(preview)}requestAnimationFrame(preview);
 }
-function slotHTML([slot,item]){return `<div class="equipSlot"><b>${slot}</b><small>${item}</small></div>`}
