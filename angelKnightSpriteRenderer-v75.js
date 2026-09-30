@@ -1,4 +1,4 @@
-import {assets} from './loadingManager-v75.js?v=76';
+import {assets} from './loadingManager-v75.js?v=77';
 // FRACTURED V4 — active flat-file Angel Knight renderer, v31.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '73';
@@ -27,7 +27,7 @@ export const SPRITE_ANIMS = {
   attack2:  {files:files('attack2'),fps:12,loop:false},
   attack3:  {files:files('attack3'),fps:12,loop:false},
   ability1: {files:Array.from({length:4},(_,i)=>`celestial_light_frame_0${i+1}.png`),fps:9,loop:false},
-  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false,durations:[.18,.35,2,.22]},
+  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false,durations:[.20,.25,1.25,.20]},
   ability3: {files:Array.from({length:4},(_,i)=>`wing_burst_frame_0${i+1}.png`),fps:9,loop:false}
 };
 export class AngelKnightSpriteRenderer {
@@ -94,6 +94,22 @@ export class AngelKnightSpriteRenderer {
     // Anchor the knight's body instead of stretching the image to a square,
     // otherwise the knight shrinks and drifts as the VFX expands.
     const isAbility=/^ability[123]$/.test(this.state);
+    if(this.state==='ability2'){
+      // Halo-to-boot landmarks exclude the raised hand, beam, and stray glow.
+      // Normal idle art occupies 720 of its 900 source pixels and ends at groundY+10.
+      const poses=[
+        {head:170,feet:550,x:222},
+        {head:104,feet:477,x:238},
+        {head:150,feet:518,x:222},
+        {head:36,feet:424,x:240}
+      ];
+      const pose=poses[Math.min(this.frame,3)];
+      const scale=targetHeight*.8/(pose.feet-pose.head);
+      ctx.save();
+      if(facing<0){ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0);}
+      ctx.drawImage(img,x-pose.x*scale,groundY+BOOT_CONTACT_INSET_PX-pose.feet*scale,img.naturalWidth*scale,img.naturalHeight*scale);
+      ctx.restore();return;
+    }
     if(isAbility){
       const anchors={
         ability1:[.51,.49,.40,.55],

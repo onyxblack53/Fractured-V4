@@ -1,4 +1,4 @@
-import {assets} from './loadingManager-v75.js?v=76';
+import {assets} from './loadingManager-v75.js?v=77';
 // Sprite feet share a fixed pivot; route elevations use the same solids as the player.
 export class SvarNpc {
   constructor(x,groundY){

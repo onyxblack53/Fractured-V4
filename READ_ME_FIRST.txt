@@ -1,7 +1,9 @@
-FRACTURED — Ability size and Halo Bolt timing v76
+FRACTURED — Halo Bolt alignment and timing v77
 
-Upload all included game files beside the existing index.html and replace matching filenames, including index.html. Keep the rest of your game files. This cumulative patch includes the loading manager, ability repair, enhancements, and Roman numeral controls.
+Upload all included game files into the existing game root, replacing matches including index.html. Keep remaining game files. Includes previous loading, enhancement and ability repairs.
 
-Ability artwork is rendered 35.3% smaller than v75. Original PNG files are unchanged. Halo Bolt now uses 0.18s wind-up, 0.35s aiming, 2.00s beam hold, and 0.22s recovery (2.75s total). Its damage still fires once when the beam begins; holding the image does not repeat damage. Other ability timings remain unchanged.
+Halo Bolt now normalizes each pose using separate halo/head-to-boot landmarks instead of the PNG canvas dimensions. Its boots align to the normal idle baseline, excluding transparent space and glow below the feet. Other ability sizes are unchanged.
 
-Local checks verified the two-second beam and reduced draw scale. Final size should be checked in your phone recording; no live-device visual verification was performed.
+Full cast: 0.20s hand raise, 0.25s aim, 1.25s beam, 0.20s recovery = 1.90 seconds total. Damage remains one impact at beam start.
+
+Tests verified total duration under 2 seconds at 30 and 60fps, equal landmark body height and fixed foot baseline across the four frames. Exact visual alignment still needs confirmation on the phone.
