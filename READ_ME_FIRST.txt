@@ -1,15 +1,16 @@
-Angel ability loading repair v74
-
-Your recording shows "casting is not connected yet", which identifies the missing cast connection branch in the old menu-era code. It is not a PNG decoding error. The v73 bundle registers that connection on player creation; an older or mixed deployed build is a likely cause. The live repository has not been inspected.
+FRACTURED — Loading manager and performance patch v75
 
 INSTALL
-1. Extract this ZIP.
-2. Upload ALL included HTML, JS, CSS and PNG files into the game folder that already contains index.html. Do not upload the enclosing ZIP/folder.
-3. Replace index.html when asked. This is essential: it now loads main-abilities-v74.js, rather than main.js.
-4. Wait for GitHub Pages deployment to complete, then refresh/reopen the game.
+Upload all HTML, JS, CSS, and PNG files from this ZIP into the existing game repository root. Replace index.html. Keep the remaining game assets. This includes the v74 ability repair, enhancements, and Roman labels.
 
-The code modules have new filenames to prevent cached modules from being mixed with old ones. Leave the old files in place; this index does not load those older versions. All 12 ability frames are included. Existing S’var, world, intro, renderer and other art files are still required.
+LOADING
+The previous progress bar was timed and could finish before images were available. The new loadingManager-v75.js waits for actual image loads and decoding. It shares sprite objects between the player and character preview, limits managed sprite requests to four concurrent loads, and shows progress for selected-character frames, S’var and essential scene art. Failed loads show a retry button. Only the selected playable character is constructed.
 
-The buttons call the real player cast method directly. Enhancement menus and Roman numeral labels remain. Four frames per ability, single impact, interruption protection, missing-image guard and rogue rejection passed local tests. If the exact old "casting is not connected yet" message appears again, the page is still using an older index/build.
+FRAME WORK
+The world no longer redraws behind the character menu; hidden pages skip gameplay updates. Character preview redraws are capped at 15fps. HUD writes run at 10Hz rather than every animation frame. Resize events are batched to one per animation frame. Gameplay animation and physics remain at the browser frame rate.
 
-Enemy effects need registered enemies; the current world has none.
+LIMITS
+This is a loading/performance manager, not moderation or anti-cheat. It does not reduce source PNG sizes or manage every intro/background request; browser caching still applies. Device-specific lag may need a recording of when it occurs. No measured phone FPS improvement is claimed.
+
+VALIDATION
+Local tests passed for four-request concurrency, image reuse, real progress, failed-load retry, timeout, module paths, ability playback/impact, cast interruption guards and class restrictions. Live deployment has not been measured.

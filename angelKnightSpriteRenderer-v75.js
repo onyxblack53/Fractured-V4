@@ -1,0 +1,130 @@
+import {assets} from './loadingManager-v75.js?v=75';
+// FRACTURED V4 — active flat-file Angel Knight renderer, v31.
+// Visual-only boot alignment; does not change physics or collision groundY.
+const ASSET_VERSION = '73';
+// idle_0.png is 900px tall; its last 41 rows are transparent.
+const SPRITE_SOURCE_HEIGHT = 900;
+const FOOT_TRANSPARENT_SOURCE_PX = 41;
+// The existing transparent-padding correction still left a visible gap on the
+// mobile bridge. This is a SCREEN/CANVAS pixel inset, applied only to artwork.
+// Do not move groundY or the collision plane to compensate for sprite pixels.
+const BOOT_CONTACT_INSET_PX = 10;
+const files = (prefix, count=4) => Array.from({length:count}, (_,i)=>`${prefix}_${i}.png`);
+export const SPRITE_ANIMS = {
+  idle:     {files:['idle_0.png'],fps:1,loop:true},
+  walk:     {files:files('run'),fps:7,loop:true},
+  run:      {files:files('run'),fps:10,loop:true},
+  jump:     {files:files('jump'),fps:8,loop:false},
+  fall:     {files:files('jump'),fps:7,loop:true},
+  land:     {files:['idle_0.png'],fps:8,loop:false},
+  block:    {files:files('block'),fps:7,loop:true},
+  blockHit: {files:files('block'),fps:11,loop:false},
+  dodge:    {files:files('dodge'),fps:13,loop:false},
+  heal:     {files:files('idle'),fps:5,loop:false},
+  hit:      {files:files('block'),fps:10,loop:false},
+  death:    {files:files('block'),fps:4,loop:false},
+  attack1:  {files:files('attack1'),fps:11,loop:false},
+  attack2:  {files:files('attack2'),fps:12,loop:false},
+  attack3:  {files:files('attack3'),fps:12,loop:false},
+  ability1: {files:Array.from({length:4},(_,i)=>`celestial_light_frame_0${i+1}.png`),fps:9,loop:false},
+  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false},
+  ability3: {files:Array.from({length:4},(_,i)=>`wing_burst_frame_0${i+1}.png`),fps:9,loop:false}
+};
+export class AngelKnightSpriteRenderer {
+  constructor(){
+    this.images = {};
+    this.state = 'idle';
+    this.frame = 0;
+    this.time = 0;
+    const imageCache = new Map();
+    for (const [state, cfg] of Object.entries(SPRITE_ANIMS)) {
+      this.images[state] = cfg.files.map(file => {
+        if (!imageCache.has(file)) {
+          const img = assets.image(`./${file}?v=${ASSET_VERSION}`);
+          imageCache.set(file, img);
+        }
+        return imageCache.get(file);
+      });
+    }
+  }
+  setState(next, force=false){
+    if (!SPRITE_ANIMS[next]) next = 'idle';
+    if (!force && this.state === next) return;
+    this.state = next;
+    this.frame = 0;
+    this.time = 0;
+  }
+  update(dt, eventHandler){
+    const cfg = SPRITE_ANIMS[this.state] || SPRITE_ANIMS.idle;
+    if (this.state === 'idle') {
+      this.frame = 0;
+      this.time = 0;
+      return null;
+    }
+    this.time += Math.max(0, dt || 0);
+    const fd = 1 / cfg.fps;
+    while (this.time >= fd) {
+      this.time -= fd;
+      this.frame++;
+      if (this.frame >= cfg.files.length) {
+        if (cfg.loop) this.frame = 0;
+        else {
+          this.frame = cfg.files.length - 1;
+          this.time = 0;
+          return 'finished';
+        }
+      }
+      if (this.state==='attack1' && this.frame===2)
+        eventHandler?.('hit',{hitbox:{x:18,y:-95,w:72,h:55,damage:20,knockback:220}});
+      if (this.state==='attack2' && this.frame===2)
+        eventHandler?.('hit',{hitbox:{x:12,y:-100,w:78,h:60,damage:25,knockback:260}});
+      if (this.state==='attack3' && this.frame===2)
+        eventHandler?.('hit',{hitbox:{x:10,y:-150,w:70,h:135,damage:36,knockback:330}});
+      if (this.state==='dodge' && this.frame===1) eventHandler?.('iframeOn',{});
+      if (this.state==='dodge' && this.frame===3) eventHandler?.('iframeOff',{});
+      if (this.state==='heal' && this.frame===2) eventHandler?.('heal',{});
+    }
+    return null;
+  }
+  draw(ctx,x,groundY,facing=1,targetHeight=190,onGround=true){
+    const frames = this.images[this.state] || this.images.idle;
+    const img = frames[Math.min(this.frame,frames.length-1)];
+    if (!img || !img.complete || !img.naturalWidth) return;
+    // Ability frames are individually cut out and have varying image dimensions.
+    // Anchor the knight's body instead of stretching the image to a square,
+    // otherwise the knight shrinks and drifts as the VFX expands.
+    const isAbility=/^ability[123]$/.test(this.state);
+    if(isAbility){
+      const anchors={
+        ability1:[.51,.49,.40,.55],
+        ability2:[.46,.47,.29,.53],
+        ability3:[.54,.51,.44,.52]
+      };
+      const ratio=targetHeight/440;
+      const width=img.naturalWidth*ratio,height=img.naturalHeight*ratio;
+      const anchorX=anchors[this.state][Math.min(this.frame,3)]*width;
+      ctx.save();
+      if(facing<0){ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0);}
+      ctx.drawImage(img,x-anchorX,groundY-height+8,width,height);
+      ctx.restore();
+      return;
+    }
+    const width=targetHeight, left=x-width/2;
+    const footPadding=targetHeight*FOOT_TRANSPARENT_SOURCE_PX/SPRITE_SOURCE_HEIGHT;
+    // One visual offset for all states, including airborne frames: no physics,
+    // jump-arc, hitbox, camera, bridge, or input changes.
+    const top=groundY-targetHeight+footPadding+BOOT_CONTACT_INSET_PX;
+    ctx.save();
+    if (onGround) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.34)';
+      ctx.beginPath();
+      ctx.ellipse(x, groundY + 1, 37, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    if (facing<0) { ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0); }
+    ctx.drawImage(img,left,top,width,targetHeight);
+    ctx.restore();
+  }
+}

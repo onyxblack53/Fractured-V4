@@ -1,0 +1,81 @@
+import {assets} from './loadingManager-v75.js?v=75';
+// Demonic Rogue animation frames. These filenames are unique in a flat upload.
+const ART_VERSION='49';
+const file=pose=>pose==='attack3-mid'
+  ?`./demonic-rogue-v49-attack3-mid-fixed.png?v=${ART_VERSION}`
+  :`./demonic-rogue-v${pose.endsWith('-mid')?'48':pose==='attack3-rise'?'47':pose.startsWith('attack2-')||pose.startsWith('attack3-')?'46':['run-stride-a','run-stride-b','attack-windup','attack-follow'].includes(pose)?'45':'43'}-${pose}.png?v=${ART_VERSION}`;
+const ANIMS={
+  idle:    {poses:['idle'],fps:1,loop:true},
+  walk:    {poses:['walk','walk','walk','walk'],fps:7,loop:true},
+  run:     {poses:['run','run-stride-a','run','run-stride-b'],fps:11,loop:true},
+  jump:    {poses:['jump','jump','jump','jump'],fps:8,loop:false},
+  fall:    {poses:['jump','jump','jump','jump'],fps:7,loop:true},
+  land:    {poses:['walk'],fps:8,loop:false},
+  block:   {poses:['block','block','block','block'],fps:7,loop:true},
+  blockHit:{poses:['block','hurt','block','block'],fps:11,loop:false},
+  dodge:   {poses:['walk','run','jump','run'],fps:13,loop:false},
+  heal:    {poses:['idle','idle','idle','idle'],fps:5,loop:false},
+  hit:     {poses:['hurt','hurt','hurt','walk'],fps:10,loop:false},
+  death:   {poses:['hurt','death','death','death'],fps:4,loop:false},
+  attack1: {poses:['idle','attack-windup','attack1-mid','attack1','attack-follow','idle'],fps:13,loop:false},
+  attack2: {poses:['idle','attack2-ready','attack2-mid','attack2-low','attack2-low','idle'],fps:14,loop:false},
+  attack3: {poses:['idle','attack3-ready','attack3-down','attack3-mid','attack3-rise','attack-follow','idle'],fps:14,loop:false}
+};
+const HITS={
+  attack1:{x:18,y:-95,w:72,h:55,damage:20,knockback:220},
+  attack2:{x:12,y:-82,w:82,h:48,damage:25,knockback:260},
+  attack3:{x:8,y:-95,w:63,h:82,damage:36,knockback:330}
+};
+const RISING_HIT={x:18,y:-132,w:68,h:82,damage:18,knockback:180};
+export class DemonicRogueRenderer{
+  constructor(){
+    this.state='idle';this.frame=0;this.time=0;this.images={};
+    for(const pose of new Set(Object.values(ANIMS).flatMap(a=>a.poses))){
+      this.images[pose]=assets.image(file(pose));
+    }
+  }
+  setState(next,force=false){
+    if(!ANIMS[next])next='idle';
+    if(!force&&this.state===next)return;
+    this.state=next;this.frame=0;this.time=0;
+  }
+  update(dt,eventHandler){
+    const cfg=ANIMS[this.state];
+    if(this.state==='idle'){this.frame=0;this.time=0;return null}
+    this.time+=Math.max(0,dt||0);
+    const frameDuration=1/cfg.fps;
+    while(this.time>=frameDuration){
+      this.time-=frameDuration;this.frame++;
+      if(this.frame>=cfg.poses.length){
+        if(cfg.loop)this.frame=0;
+        else{this.frame=cfg.poses.length-1;this.time=0;return 'finished'}
+      }
+      if(this.frame===(this.state==='attack3'?2:3)&&HITS[this.state])eventHandler?.('hit',{hitbox:HITS[this.state]});
+      if(this.state==='attack3'&&this.frame===4)eventHandler?.('hit',{hitbox:RISING_HIT});
+      if(this.state==='dodge'&&this.frame===1)eventHandler?.('iframeOn',{});
+      if(this.state==='dodge'&&this.frame===3)eventHandler?.('iframeOff',{});
+      if(this.state==='heal'&&this.frame===2)eventHandler?.('heal',{});
+    }
+    return null;
+  }
+  draw(ctx,x,y,facing=1,height=190,onGround=true){
+    const cfg=ANIMS[this.state]||ANIMS.idle;
+    const pose=cfg.poses[Math.min(this.frame,cfg.poses.length-1)];
+    const image=this.images[pose];
+    if(!image?.complete||!image.naturalWidth)return;
+    const width=height*image.naturalWidth/image.naturalHeight;
+    ctx.save();
+    if(onGround){ctx.fillStyle='rgba(0,0,0,.34)';ctx.beginPath();ctx.ellipse(x,y+1,31,4,0,0,Math.PI*2);ctx.fill()}
+    if(facing<0){ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0)}
+    if(this.state==='death')ctx.globalAlpha=Math.max(.15,1-this.frame/4);
+    else if(this.state==='dodge')ctx.globalAlpha=.8;
+    // Smooth subpixel stride motion without swapping to a differently framed
+    // illustration on each step. Keep the foot baseline fixed on the bridge.
+    const moving=this.state==='walk';
+    const phase=moving?(this.frame+this.time*cfg.fps)*Math.PI/2:0;
+    const sway=moving?Math.sin(phase)*height*.006:0;
+    const lift=moving?Math.abs(Math.sin(phase))*height*.004:0;
+    ctx.drawImage(image,x-width/2+sway,y-height-lift,width,height);
+    ctx.restore();
+  }
+}
