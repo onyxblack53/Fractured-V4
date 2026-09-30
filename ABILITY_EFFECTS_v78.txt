@@ -1,0 +1,10 @@
+Upload all files in this ZIP alongside the existing game files, replacing matching files. This is a cumulative patch, not a standalone game.
+
+Celestial Light: visible surrounding flash, 100-world-pixel radius (the existing 10-ft scale), 3.5-second stun. Registered enemies' update functions are suspended during the stun and restored afterward.
+Halo Bolt: travelling yellow-white lightning, swept collision, 24 base damage once to the first target. Existing 1.9-second character animation unchanged.
+Wing Burst: outward moving wind streaks, 18 base damage once per target and 85-world-pixel knockback.
+Damage scales with the character's damage enhancements. Effects pause during dialogue and menus and clear at scene changes. No new PNGs are needed. Angel-only; S'var is excluded.
+
+Enemy integration: enemies must be registered in window.FRACTURED.enemies with world-space x and feet y, height/renderHeight, and either damage(amount,sourceX) or numeric hp. Hostile AI must run through its update method for the stun to suspend it. This patch does not spawn enemies; the current tutorial has no combat targets.
+
+Checked with simulated enemy targets: bolt travel/collision, one-hit damage, wind displacement, stun timing/restoration, scene cleanup and rogue rejection. Mobile browser rendering still needs an in-game check after upload.

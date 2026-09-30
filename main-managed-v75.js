@@ -1,5 +1,7 @@
 import {assets} from './loadingManager-v75.js?v=77';
-import {ANGEL_ABILITIES,useAngelAbility} from "./angelAbilities-v74.js?v=74";
+import {ANGEL_ABILITIES} from "./angelAbilities-v74.js?v=74";
+import {AngelAbilityEffects} from './angelAbilityEffects-v78.js?v=78';
+const abilityEffects=new AngelAbilityEffects();
 import {abilityCatalog,loadAbilities} from "./abilityLoadout-v74.js?v=74";
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=50";
@@ -46,7 +48,7 @@ window.FRACTURED.demonicRogue=config.origin==='demonic-rogue'?player:null;
 window.FRACTURED.svar=svar;
 window.FRACTURED.scene=scene;
 svar.ready.then(loaded=>{if(!loaded){const toast=document.getElementById("toast");toast.textContent="S’var artwork could not load. Reload to retry.";toast.classList.add("show");}});
-player.onAbilityImpact=index=>useAngelAbility(player,index,window.FRACTURED.enemies||[]);
+player.onAbilityImpact=index=>abilityEffects.cast(player,index,window.FRACTURED.enemies||[]);
 window.FRACTURED.castAbility=(id,actor)=>{const index=ANGEL_ABILITIES.findIndex(a=>a.id===id);return actor===player&&actor.origin==='angelic-knight'&&index>=0&&actor.castAbility(index)};
 refreshAbilities();
 if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=config.displayName;resize();last=performance.now()}
@@ -106,6 +108,7 @@ const questText=document.querySelector('#quest span');
 function switchScene(next){
   if(transitioning||!player)return;
   transitioning=true;fade.style.opacity='1';player.vx=0;
+  abilityEffects.clear();
   setTimeout(()=>{
     scene=next;window.FRACTURED.scene=scene;
     if(next==='cathedral'){
@@ -134,7 +137,7 @@ function frame(now){
   if(player){
     const paused=transitioning||dialogue.opened||document.getElementById('rpgMenu').classList.contains('open');
     if(dialogue.opened){player.vx=0;player.input.moveX=0;player.input.moveY=0;player.input.block=false;player.input.attack=false;player.input.jump=false;player.input.dodge=false;player.input.heal=false}
-    if(!paused){player.update(dt);abilityCooldowns.update(dt)}
+    if(!paused){player.update(dt);abilityCooldowns.update(dt);abilityEffects.update(dt,window.FRACTURED.enemies||[],world.worldWidth)}
     if(now-lastHud>=100){renderAbilities();lastHud=now;
       hpFill.style.width=`${player.hp/player.maxHp*100}%`;
       staminaFill.style.width=`${player.stamina/player.maxStamina*100}%`;
@@ -152,7 +155,7 @@ function frame(now){
       gate.draw(ctx,world.cameraX,innerWidth);
       if(svar)svar.draw(ctx,world.cameraX,innerWidth,innerHeight);
     }
-    player.draw(ctx);ctx.restore();
+    player.draw(ctx);abilityEffects.draw(ctx);ctx.restore();
     dialogue.updatePrompt(svar,player,world.cameraX,scene,paused,innerHeight);
 
   }
