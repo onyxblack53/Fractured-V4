@@ -1,4 +1,4 @@
-import {assets} from './loadingManager-v75.js?v=75';
+import {assets} from './loadingManager-v75.js?v=76';
 // FRACTURED V4 — active flat-file Angel Knight renderer, v31.
 // Visual-only boot alignment; does not change physics or collision groundY.
 const ASSET_VERSION = '73';
@@ -27,7 +27,7 @@ export const SPRITE_ANIMS = {
   attack2:  {files:files('attack2'),fps:12,loop:false},
   attack3:  {files:files('attack3'),fps:12,loop:false},
   ability1: {files:Array.from({length:4},(_,i)=>`celestial_light_frame_0${i+1}.png`),fps:9,loop:false},
-  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false},
+  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false,durations:[.18,.35,2,.22]},
   ability3: {files:Array.from({length:4},(_,i)=>`wing_burst_frame_0${i+1}.png`),fps:9,loop:false}
 };
 export class AngelKnightSpriteRenderer {
@@ -62,9 +62,9 @@ export class AngelKnightSpriteRenderer {
       return null;
     }
     this.time += Math.max(0, dt || 0);
-    const fd = 1 / cfg.fps;
-    while (this.time >= fd) {
-      this.time -= fd;
+    const frameDuration=()=>cfg.durations?.[this.frame] ?? 1/cfg.fps;
+    while (this.time >= frameDuration()) {
+      this.time -= frameDuration();
       this.frame++;
       if (this.frame >= cfg.files.length) {
         if (cfg.loop) this.frame = 0;
@@ -100,7 +100,7 @@ export class AngelKnightSpriteRenderer {
         ability2:[.46,.47,.29,.53],
         ability3:[.54,.51,.44,.52]
       };
-      const ratio=targetHeight/440;
+      const ratio=targetHeight/680;
       const width=img.naturalWidth*ratio,height=img.naturalHeight*ratio;
       const anchorX=anchors[this.state][Math.min(this.frame,3)]*width;
       ctx.save();

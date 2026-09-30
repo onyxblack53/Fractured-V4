@@ -1,4 +1,4 @@
-import {assets} from './loadingManager-v75.js?v=75';
+import {assets} from './loadingManager-v75.js?v=76';
 // Demonic Rogue animation frames. These filenames are unique in a flat upload.
 const ART_VERSION='49';
 const file=pose=>pose==='attack3-mid'

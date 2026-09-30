@@ -1,6 +1,6 @@
 import {applyEnhancements,loadEnhancements} from "./enhancements-v74.js?v=74";
-import {DemonicRogueRenderer} from "./demonicRogueRenderer-v75.js?v=75";
-import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer-v75.js?v=75";
+import {DemonicRogueRenderer} from "./demonicRogueRenderer-v75.js?v=76";
+import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer-v75.js?v=76";
 
 export class Player{
   constructor(x=300,y=500,build={}){
