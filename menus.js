@@ -1,5 +1,5 @@
-import {SLOTS,loadEnhancements,saveEnhancements,applyEnhancements,bonuses} from './enhancements.js?v=71';
-import {abilityCatalog,loadAbilities,saveAbilities,assignAbility} from './abilityLoadout.js?v=71';
+import {SLOTS,loadEnhancements,saveEnhancements,applyEnhancements,bonuses} from './enhancements.js?v=73';
+import {abilityCatalog,loadAbilities,saveAbilities,assignAbility} from './abilityLoadout.js?v=73';
 export function initMenus(getBuild){
  const $=id=>document.getElementById(id),menu=$('rpgMenu'),picker=$('enh-picker');
  let origin='angelic-knight',loadout={},abilities=[],selection=null,returnFocus=null,previewRenderer=null,previewOwner=null,last=0;

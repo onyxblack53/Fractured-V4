@@ -1,6 +1,6 @@
 // FRACTURED V4 — active flat-file Angel Knight renderer, v31.
 // Visual-only boot alignment; does not change physics or collision groundY.
-const ASSET_VERSION = '36';
+const ASSET_VERSION = '73';
 // idle_0.png is 900px tall; its last 41 rows are transparent.
 const SPRITE_SOURCE_HEIGHT = 900;
 const FOOT_TRANSPARENT_SOURCE_PX = 41;
@@ -24,7 +24,10 @@ export const SPRITE_ANIMS = {
   death:    {files:files('block'),fps:4,loop:false},
   attack1:  {files:files('attack1'),fps:11,loop:false},
   attack2:  {files:files('attack2'),fps:12,loop:false},
-  attack3:  {files:files('attack3'),fps:12,loop:false}
+  attack3:  {files:files('attack3'),fps:12,loop:false},
+  ability1: {files:Array.from({length:4},(_,i)=>`celestial_light_frame_0${i+1}.png`),fps:9,loop:false},
+  ability2: {files:Array.from({length:4},(_,i)=>`halo_bolt_frame_0${i+1}.png`),fps:10,loop:false},
+  ability3: {files:Array.from({length:4},(_,i)=>`wing_burst_frame_0${i+1}.png`),fps:9,loop:false}
 };
 export class AngelKnightSpriteRenderer {
   constructor(){
@@ -88,6 +91,25 @@ export class AngelKnightSpriteRenderer {
     const frames = this.images[this.state] || this.images.idle;
     const img = frames[Math.min(this.frame,frames.length-1)];
     if (!img || !img.complete || !img.naturalWidth) return;
+    // Ability frames are individually cut out and have varying image dimensions.
+    // Anchor the knight's body instead of stretching the image to a square,
+    // otherwise the knight shrinks and drifts as the VFX expands.
+    const isAbility=/^ability[123]$/.test(this.state);
+    if(isAbility){
+      const anchors={
+        ability1:[.51,.49,.40,.55],
+        ability2:[.46,.47,.29,.53],
+        ability3:[.54,.51,.44,.52]
+      };
+      const ratio=targetHeight/440;
+      const width=img.naturalWidth*ratio,height=img.naturalHeight*ratio;
+      const anchorX=anchors[this.state][Math.min(this.frame,3)]*width;
+      ctx.save();
+      if(facing<0){ctx.translate(x,0);ctx.scale(-1,1);ctx.translate(-x,0);}
+      ctx.drawImage(img,x-anchorX,groundY-height+8,width,height);
+      ctx.restore();
+      return;
+    }
     const width=targetHeight, left=x-width/2;
     const footPadding=targetHeight*FOOT_TRANSPARENT_SOURCE_PX/SPRITE_SOURCE_HEIGHT;
     // One visual offset for all states, including airborne frames: no physics,

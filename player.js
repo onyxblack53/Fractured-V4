@@ -1,6 +1,6 @@
-import {applyEnhancements,loadEnhancements} from "./enhancements.js?v=71";
+import {applyEnhancements,loadEnhancements} from "./enhancements.js?v=73";
 import {DemonicRogueRenderer} from "./demonicRogueRenderer.js?v=49";
-import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=37";
+import { AngelKnightSpriteRenderer,SPRITE_ANIMS } from "./angelKnightSpriteRenderer.js?v=73";
 
 export class Player{
   constructor(x=300,y=500,build={}){
@@ -35,6 +35,7 @@ export class Player{
     this.comboGrace=0;
     this.attackQueued=false;
     this.activeHitbox=null;
+    this.abilityImpact=null;
 
     this.input={
       moveX:0,
@@ -55,6 +56,7 @@ export class Player{
     if(this.state===next&&!force)return;
     this.activeHitbox=null;
     this.state=next;
+    if(!next.startsWith('ability'))this.abilityImpact=null;
     this.renderer.setState(next,force);
   }
 
@@ -65,8 +67,21 @@ export class Player{
     if(name==="hit")this.activeHitbox={...frame.hitbox,ttl:.09};
   }
 
+  castAbility(index){
+    if(this.origin!=='angelic-knight'||this.dead||!Number.isInteger(index)||index<0||index>2)return false;
+    if(!this.onGround||!['idle','walk','run','block'].includes(this.state))return false;
+    if(!this.renderer.images[`ability${index+1}`]?.every(img=>img.complete&&img.naturalWidth>0))return false;
+    this.isBlocking=false;
+    this.attackQueued=false;this.comboStep=0;this.comboGrace=0;
+    for(const k of ['attack','jump','dodge','heal','block'])this.input[k]=false;
+    this.vx=0;
+    this.abilityImpact={index,triggered:false};
+    this.setState(`ability${index+1}`,true);
+    return true;
+  }
+
   requestAttack(){
-    if(this.dead||this.stamina<8)return;
+    if(this.dead||this.state.startsWith('ability')||this.stamina<8)return;
 
     if(this.state.startsWith("attack")){
       if(this.origin==='demonic-rogue'||this.comboWindow>0)this.attackQueued=true;
@@ -84,7 +99,7 @@ export class Player{
   }
 
   dodge(){
-    if(this.dead||this.stamina<20)return;
+    if(this.dead||this.state.startsWith('ability')||this.stamina<20)return;
     this.stamina-=20;
 
     const dir=Math.abs(this.input.moveX)>.08?Math.sign(this.input.moveX):this.facing;
@@ -94,13 +109,13 @@ export class Player{
   }
 
   heal(){
-    if(this.dead||this.hp>=this.maxHp||this.stamina<18)return;
+    if(this.dead||this.state.startsWith('ability')||this.hp>=this.maxHp||this.stamina<18)return;
     this.stamina-=18;
     this.setState("heal",true);
   }
 
   jump(){
-    if(this.dead||!this.onGround)return;
+    if(this.dead||this.state.startsWith('ability')||!this.onGround)return;
     this.onGround=false;
     this.vy=-this.jumpPower;
     this.setState("jump",true);
@@ -120,6 +135,10 @@ export class Player{
     }
 
     const result=this.renderer.update(dt,(name,frame)=>this.handleAnimationEvent(name,frame));
+    if(this.origin==='angelic-knight'&&this.abilityImpact&&!this.abilityImpact.triggered&&this.renderer.frame>=2){
+      this.abilityImpact.triggered=true;
+      this.onAbilityImpact?.(this.abilityImpact.index);
+    }
 
     if(this.dead)return;
 
@@ -140,7 +159,7 @@ export class Player{
         this.setState("attack3",true);
       }else if(this.state==="jump"){
         this.setState("fall",true);
-      }else if(["attack1","attack2","attack3","dodge","heal","blockHit","hit","land"].includes(this.state)){
+      }else if(["attack1","attack2","attack3","ability1","ability2","ability3","dodge","heal","blockHit","hit","land"].includes(this.state)){
         const completed=this.state;
         this.attackQueued=false;
         if(this.origin==='demonic-rogue'&&(completed==='attack1'||completed==='attack2'))this.comboGrace=.75;
@@ -155,7 +174,7 @@ export class Player{
     if(this.input.heal){this.input.heal=false;this.heal()}
     if(this.input.jump){this.input.jump=false;this.jump()}
 
-    this.isBlocking=!!this.input.block&&this.onGround&&!this.state.startsWith("attack")&&this.state!=="dodge";
+    this.isBlocking=!this.state.startsWith('ability')&&!!this.input.block&&this.onGround&&!this.state.startsWith("attack")&&this.state!=="dodge";
 
     if(this.isBlocking){
       if(this.state!=="block")this.setState("block");
@@ -163,7 +182,7 @@ export class Player{
       this.setState("idle");
     }
 
-    const locked=["attack1","attack2","attack3","dodge","heal","blockHit","hit","death"].includes(this.state);
+    const locked=["attack1","attack2","attack3","ability1","ability2","ability3","dodge","heal","blockHit","hit","death"].includes(this.state);
     const mx=Math.max(-1,Math.min(1,this.input.moveX));
 
     if(!locked&&!this.isBlocking){

@@ -1,14 +1,15 @@
-import {abilityCatalog,loadAbilities} from "./abilityLoadout.js?v=71";
+import {ANGEL_ABILITIES,useAngelAbility} from "./angelAbilities.js?v=73";
+import {abilityCatalog,loadAbilities} from "./abilityLoadout.js?v=73";
 import {AbilityCooldowns} from "./abilityCooldowns.js?v=38";
 import {CharacterCreator} from "./creator.js?v=50";
-import {Player} from "./player.js?v=71";
+import {Player} from "./player.js?v=73";
 import {Ruins} from "./ruins.js?v=59";
 import {SvarNpc} from "./svarNpc.js?v=70";
 import {SvarConversation} from "./svarConversation.js?v=70";
 import {CathedralGate} from "./cathedralGate.js?v=59";
 import {CathedralInterior} from "./cathedralInterior.js?v=59";
 import {bindControls} from "./controls.js?v=11";
-import {initMenus} from "./menus.js?v=71";
+import {initMenus} from "./menus.js?v=73";
 import {WorldExtension} from "./worldExtension.js?v=20";
 const canvas=document.getElementById("game"),ctx=canvas.getContext("2d",{alpha:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
 const GROUND_RATIO=.755,hpFill=document.getElementById("hp-fill"),staminaFill=document.getElementById("stamina-fill"),stateLabel=document.getElementById("state-label"),buildLabel=document.getElementById("build-label"),loadingFill=document.getElementById("loading-fill"),loadingBuild=document.getElementById("loading-build");
@@ -44,6 +45,8 @@ window.FRACTURED.demonicRogue=config.origin==='demonic-rogue'?player:null;
 window.FRACTURED.svar=svar;
 window.FRACTURED.scene=scene;
 svar.ready.then(loaded=>{if(!loaded){const toast=document.getElementById("toast");toast.textContent="S’var artwork could not load. Reload to retry.";toast.classList.add("show");}});
+player.onAbilityImpact=index=>useAngelAbility(player,index,window.FRACTURED.enemies||[]);
+window.FRACTURED.castAbility=(id,actor)=>{const index=ANGEL_ABILITIES.findIndex(a=>a.id===id);return actor===player&&actor.origin==='angelic-knight'&&index>=0&&actor.castAbility(index)};
 refreshAbilities();
 if(!controlsBound){bindControls(player);controlsBound=true}buildLabel.textContent=config.displayName;resize();last=performance.now()}
 function beginGame(config){if(window.FRACTURED.loading||window.FRACTURED.started)return;
@@ -60,8 +63,8 @@ const abilityButtons=abilityLabels.map((label,i)=>document.getElementById(`abili
 function renderAbilities(){
   abilityButtons.forEach((button,i)=>{
     const remaining=abilityCooldowns.remaining[i];
-    button.disabled=!player||!equippedAbilities[i]||player.dead||dialogue.opened||remaining>0;
-    button.querySelector("span").textContent=abilityLabels[i];
+    button.disabled=!player||!equippedAbilities[i]||player.dead||player.state.startsWith("ability")||dialogue.opened||remaining>0;
+    button.querySelector("span").textContent=["I","II","III"][i];
     button.querySelector('.cooldown').textContent=remaining>0?`${Math.ceil(remaining)}s`:'';
     button.style.setProperty('--cooldown-fill',`${remaining/abilityCooldowns.durations[i]*100}%`);
     button.setAttribute('aria-label',`${abilityLabels[i]}${remaining>0?`, ${Math.ceil(remaining)} seconds remaining`:`, ready`}`);
