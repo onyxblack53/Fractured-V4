@@ -1,0 +1,7 @@
+Upload index.html AND fractured-runtime-v79.js to the SAME game folder that contains styles.css and the existing PNGs. Replace index.html. Upload the files inside this ZIP, not the ZIP itself or its containing folder. Keep the existing game images and other files.
+
+This startup repair combines the game JavaScript and bridge code into one file, including the v78 ability effects. It removes the separate runtime import requests, so partial module uploads and mixed module caches cannot block the Begin button. Artwork is still loaded from your existing files.
+
+If startup still fails, the start screen will now show an error message. Send that exact message. Refresh the page after both files finish uploading.
+
+Validation: all 20 source modules resolved, bundled JavaScript syntax passed, simulated DOM/images exercised the Begin button, intro, both character selections, loading and first game frame. Actual iPhone rendering was not tested.

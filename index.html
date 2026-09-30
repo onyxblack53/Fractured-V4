@@ -72,6 +72,12 @@
     <section id="enh-picker" role="dialog" aria-modal="true" aria-labelledby="enh-picker-title" hidden><div class="enh-picker-card"><header><h2 id="enh-picker-title"></h2><button id="enh-picker-close" aria-label="Close enhancement selection">×</button></header><p id="enh-picker-note" class="enh-note">Choose one enhancement for this slot.</p><div id="enh-options"></div><button id="enh-remove">Remove enhancement</button><p id="enh-feedback" role="status"></p></div></section>
   </div>
 </div>
-<script type="module" src="./main-managed-v75.js?v=78"></script>
-  <script type="module" src="./bridge-world-v23.js?v=23"></script>
-</body></html>
+
+  
+<script>
+(()=>{
+ const report=message=>{let box=document.getElementById('boot-error');if(!box){box=document.createElement('p');box.id='boot-error';box.style.cssText='color:#ffdf9b;max-width:340px;margin:16px auto;white-space:pre-wrap';document.getElementById('start-screen').appendChild(box);}box.textContent='Game startup failed: '+message;};
+ window.addEventListener('error',event=>{if(!window.__fracturedBootReady)report(event.message||'The game file could not be loaded.');});
+ const script=document.createElement('script');script.src='./fractured-runtime-v79.js?v=79';script.onerror=()=>report('Upload fractured-runtime-v79.js alongside index.html, then refresh.');document.body.appendChild(script);
+})();
+</script></body></html>
